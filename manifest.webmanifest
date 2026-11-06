@@ -1,0 +1,3 @@
+{"name":"Minha Rádio","short_name":"Rádio","start_url":"./","display":"standalone",
+ "background_color":"#12161C","theme_color":"#12161C",
+ "icons":[{"src":"icon-512.png","sizes":"512x512","type":"image/png"},{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
