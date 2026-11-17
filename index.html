@@ -474,7 +474,7 @@
 /* ======================= base ======================= */
 const SERVERS = ["de1.api.radio-browser.info","fi1.api.radio-browser.info","de2.api.radio-browser.info","nl1.api.radio-browser.info"];
 // nome da música: precisa de uma função no servidor; sem ela o app funciona igual, só não mostra a música
-const NOWPLAYING = location.hostname.endsWith("netlify.app") ? "/api/nowplaying" : "";
+const NOWPLAYING = "https://minha-radio-musica.rverissimodantas.workers.dev/";   // serviço no Cloudflare
 const GENRES = [["Notícias","news",210],["Pop","pop",330],["Rock","rock",0],["Fado","fado",28],["MPB","mpb",150],["Samba","samba",45],
   ["Sertanejo","sertanejo",80],["Jazz","jazz",265],["Clássica","classical",190],["Eletrônica","electronic",290],["Anos 80","80s",310],["Conversa","talk",170]];
 const CN = {PT:"Portugal", BR:"Brasil", "":"todo o mundo"};
