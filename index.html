@@ -299,6 +299,22 @@
   kbd{font:inherit; font-size:12px; min-width:24px; text-align:center; padding:2px 7px; border-radius:5px; background:var(--raise); border:1px solid var(--line); border-bottom-width:2px}
   .help{width:34px; height:34px; border-radius:50%; background:rgba(0,0,0,.45); display:grid; place-items:center; color:var(--mut); font-weight:700; flex:none}
   .help:hover{color:var(--txt)}
+  .art .cover{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; padding:0; background:#000; z-index:2; animation:fade .4s}
+  .art .badge{position:absolute; right:6%; bottom:6%; z-index:3; width:24%; aspect-ratio:1; border-radius:18%; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,.5); display:grid; place-items:center; color:#fff; font-weight:700;
+    background:linear-gradient(140deg, hsl(var(--bh) 68% 56%), hsl(calc(var(--bh) + 45) 62% 34%))}
+  .art .badge img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; padding:8%}
+  .sg .cv{width:40px; height:40px; border-radius:4px; object-fit:cover; flex:none; background:var(--raise)}
+  .sg .ttl{display:flex; align-items:center; gap:12px; min-width:0}
+  .bad-tag{color:#E5806B; font-size:12px}
+  .confirm p{color:var(--mut); margin:0 0 18px; line-height:1.5}
+  .confirm .row{display:flex; gap:10px; justify-content:flex-end}
+  .btn{height:38px; padding:0 18px; border-radius:999px; font-weight:600; background:var(--raise)}
+  .btn:hover{background:#2D323A}
+  .btn.pri{background:var(--txt); color:var(--black)}
+  .btn.pri:hover{transform:scale(1.03)}
+  .lib-head .lib-more{margin-left:auto; width:30px; height:30px; border-radius:50%; display:grid; place-items:center; color:var(--mut)}
+  .lib-head .lib-more:hover{background:var(--hover); color:var(--txt)}
+  .lib-head .lib-more svg{width:18px; height:18px}
   .sleep{position:fixed; right:12px; bottom:92px; z-index:30; width:230px; background:var(--raise); border-radius:10px; padding:8px;
     box-shadow:0 20px 50px rgba(0,0,0,.6); animation:pop .14s ease-out}
   .sleep h4{margin:6px 8px 8px; font-size:13px; color:var(--mut); font-weight:500}
@@ -357,7 +373,7 @@
       <button class="nav" id="navSongs"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>Músicas que tocaram</span></button>
     </div>
     <div class="panel lib">
-      <div class="lib-head"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h2v18H4zM9 3h2v18H9zM14.2 3.6l1.9-.6 5.4 17.4-1.9.6z"/></svg><span>As minhas memórias</span></div>
+      <div class="lib-head"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h2v18H4zM9 3h2v18H9zM14.2 3.6l1.9-.6 5.4 17.4-1.9.6z"/></svg><span>As minhas memórias</span><button class="lib-more" id="libMore" aria-label="Cópia de segurança" title="Cópia de segurança"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button></div>
       <div class="chips" id="libBanks"></div>
       <div class="lib-list" id="libList"></div>
     </div>
@@ -440,6 +456,14 @@
 </div>
 
 <div class="menu" id="menu" role="menu" hidden></div>
+<div class="modal" id="confirmModal" hidden>
+  <div class="modal-box confirm" role="alertdialog" aria-labelledby="cfTitle">
+    <h2 id="cfTitle">Importar cópia de segurança</h2>
+    <p id="cfText"></p>
+    <div class="row"><button class="btn" id="cfNo">Cancelar</button><button class="btn pri" id="cfYes">Importar</button></div>
+  </div>
+</div>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
 <div class="modal" id="helpModal" hidden>
   <div class="modal-box" role="dialog" aria-labelledby="helpTitle">
     <h2 id="helpTitle">Atalhos de teclado<button id="helpClose" aria-label="Fechar">✕</button></h2>
@@ -474,7 +498,8 @@
 /* ======================= base ======================= */
 const SERVERS = ["de1.api.radio-browser.info","fi1.api.radio-browser.info","de2.api.radio-browser.info","nl1.api.radio-browser.info"];
 // nome da música: precisa de uma função no servidor; sem ela o app funciona igual, só não mostra a música
-const NOWPLAYING = "https://minha-radio-musica.rverissimodantas.workers.dev/";   // serviço no Cloudflare
+const SVC = "https://minha-radio-musica.rverissimodantas.workers.dev/";   // serviço no Cloudflare
+const NOWPLAYING = SVC;
 const GENRES = [["Notícias","news",210],["Pop","pop",330],["Rock","rock",0],["Fado","fado",28],["MPB","mpb",150],["Samba","samba",45],
   ["Sertanejo","sertanejo",80],["Jazz","jazz",265],["Clássica","classical",190],["Eletrônica","electronic",290],["Anos 80","80s",310],["Conversa","talk",170]];
 const CN = {PT:"Portugal", BR:"Brasil", "":"todo o mundo"};
@@ -514,19 +539,62 @@ function mono(name){
   if (/^\d/.test(w[0])) return w[0].replace(/[^\d.,]/g,"").slice(0,4);
   return (w[0][0] + (w[1] && /^\p{L}/u.test(w[1]) ? w[1][0] : "")).toUpperCase();
 }
+/* ---------- logos: tenta várias fontes até encontrar um bom ---------- */
+const httpsPage = location.protocol === "https:";
+const viaSvc = u => httpsPage && /^http:/i.test(u) ? SVC + "img?url=" + encodeURIComponent(u) : u;
+let logoMemo = store.get("radio.logos", {});            // rádio → logo que funcionou (ou "-" se nenhum)
+let logoSaveT;
+function rememberLogo(id, url){
+  if (!id || logoMemo[id] === url) return;
+  logoMemo[id] = url;
+  const keys = Object.keys(logoMemo); if (keys.length > 900) keys.slice(0, keys.length - 800).forEach(k => delete logoMemo[k]);
+  clearTimeout(logoSaveT); logoSaveT = setTimeout(() => store.set("radio.logos", logoMemo), 800);
+}
+function logoSources(s){
+  if (!s) return [];
+  const out = [];
+  if (/^https?:/.test(s.favicon || "")) out.push(viaSvc(s.favicon));
+  if (/^https?:/.test(s.homepage || "")){
+    out.push(SVC + "logo?site=" + encodeURIComponent(s.homepage));
+    out.push("https://www.google.com/s2/favicons?sz=256&domain_url=" + encodeURIComponent(s.homepage));
+  }
+  return out;
+}
 function art(s, cls = "", size = 48){
   const h = hueOf(s && s.name);
-  return `<div class="art ${cls}" style="--h:${h}; --s:${size}px" data-fav="${esc(s && /^https?:/.test(s.favicon) ? s.favicon : "")}"><span class="mono">${esc(s ? mono(s.name) : "♪")}</span></div>`;
+  const id = s && s.stationuuid || "";
+  const memo = id && logoMemo[id];
+  const noneYet = memo && memo.startsWith("-:") && Date.now() - +memo.slice(2) < 3*864e5;   // sem logo: tenta de novo daqui a 3 dias
+  const srcs = noneYet ? [] : memo && !memo.startsWith("-:") ? [memo, ...logoSources(s).filter(x => x !== memo)] : logoSources(s);
+  return `<div class="art ${cls}" style="--h:${h}; --s:${size}px" data-id="${esc(id)}" data-src="${esc(srcs.map(encodeURIComponent).join(" "))}"><span class="mono">${esc(s ? mono(s.name) : "♪")}</span></div>`;
 }
 function hydrate(root = document){
-  root.querySelectorAll(".art[data-fav]").forEach(el => {
-    const src = el.dataset.fav; el.removeAttribute("data-fav"); if (!src) return;
-    // a imagem entra logo no DOM (escondida) para carregar; só aparece se for um logo válido
-    const img = new Image(); img.alt = ""; img.referrerPolicy = "no-referrer"; img.decoding = "async";
-    img.style.visibility = "hidden";
-    img.onload = () => { if (img.naturalWidth >= 16) img.style.visibility = ""; else img.remove(); };
-    img.onerror = () => img.remove();
-    img.src = src; el.appendChild(img);
+  root.querySelectorAll(".art[data-src]").forEach(el => {
+    const list = el.dataset.src.split(" ").filter(Boolean).map(decodeURIComponent);
+    const id = el.dataset.id;
+    el.removeAttribute("data-src");
+    if (!list.length) return;
+    let best = null, i = 0;
+    const done = () => {
+      if (best){ el.querySelectorAll("img:not(.cover)").forEach(x => x !== best.img && x.remove()); best.img.style.visibility = ""; rememberLogo(id, best.src); }
+      else if (id && navigator.onLine !== false) rememberLogo(id, "-:" + Date.now());
+    };
+    const next = () => {
+      if (i >= list.length) return done();
+      const src = list[i++], minW = /google\.com\/s2/.test(src) ? 32 : 16;
+      // a imagem entra logo no DOM (escondida) para carregar; só aparece se for um logo válido
+      const img = new Image(); img.alt = ""; img.referrerPolicy = "no-referrer"; img.decoding = "async";
+      img.style.visibility = "hidden";
+      img.onload = () => {
+        const w = img.naturalWidth;
+        if (w >= minW && (!best || w > best.w)){ if (best) best.img.remove(); best = {img, w, src}; } else img.remove();
+        if (best && best.w >= 96) return done();      // já é um logo grande o suficiente
+        next();
+      };
+      img.onerror = () => { img.remove(); next(); };
+      img.src = src; el.appendChild(img);
+    };
+    next();
   });
 }
 function paint(el, s, size){ el.outerHTML; const tmp = document.createElement("div"); tmp.innerHTML = art(s, el.className.replace(/\bart\b/,"").trim(), size); const n = tmp.firstChild; n.id = el.id; el.replaceWith(n); hydrate(n.parentNode); }
@@ -548,9 +616,40 @@ function dedupe(list){ const seen = new Set(); return list.filter(s => { const k
 async function fetchStations({q, tag, cc = country, limit = 150}){
   const p = new URLSearchParams({limit:String(limit), hidebroken:"true", order:"clickcount", reverse:"true"});
   if (q) p.set("name", q); if (cc) p.set("countrycode", cc); if (tag) p.set("tag", tag);
-  return dedupe(await api("stations/search?" + p));
+  return goodFirst(dedupe(await api("stations/search?" + p)));
 }
 const isLive = s => powered && same(s, current);
+
+/* ---------- atualiza dados das rádios guardadas (logo, site, endereço) ---------- */
+async function refreshSaved(){
+  const pool = [...slots.filter(Boolean), ...recent, current].filter(Boolean);
+  const ids = [...new Set(pool.filter(s => s.homepage === undefined || !s.favicon).map(s => s.stationuuid))].slice(0, 120);
+  if (!ids.length) return;
+  try{
+    const fresh = {};
+    for (let k = 0; k < ids.length; k += 40){
+      const data = await api("stations/byuuid?uuids=" + ids.slice(k, k+40).join(","));
+      data.forEach(x => fresh[x.stationuuid] = slim(x));
+    }
+    const upd = s => s && fresh[s.stationuuid] ? {...s, ...fresh[s.stationuuid], name: s.name} : s;
+    slots = slots.map(upd); recent = recent.map(upd); if (current) current = upd(current);
+    ids.forEach(id => { if ((logoMemo[id] || "").startsWith("-:")) delete logoMemo[id]; });
+    store.set("radio.slots", slots); store.set("radio.recent", recent); if (current) store.set("radio.last", current);
+    renderLib(); renderQuick(); $("#plArt").dataset.id = ""; refreshNow();
+    if (view.name === "home") render();
+  }catch(e){}
+}
+
+/* ---------- rádios que não respondem vão para o fim das listas ---------- */
+let bad = store.get("radio.bad", {});
+const BAD_DAYS = 3;
+const isBad = s => s && bad[s.stationuuid] && Date.now() - bad[s.stationuuid] < BAD_DAYS*864e5;
+function markBad(s, on){
+  if (!s) return;
+  if (on) bad[s.stationuuid] = Date.now(); else if (bad[s.stationuuid]) delete bad[s.stationuuid]; else return;
+  store.set("radio.bad", bad);
+}
+const goodFirst = list => [...list.filter(s => !isBad(s)), ...list.filter(isBad)];
 
 /* ======================= navegação ======================= */
 function go(v, push = true){
@@ -692,7 +791,7 @@ function drawRows(list){
   const box = $("#rows");
   box.innerHTML = list.map((s,i) => `<button class="tr" data-i="${i}" aria-current="${same(s,current)}">
     <span class="n"><span class="num">${isLive(s) ? EQ : i+1}</span><span class="pl">${PLAY}</span></span>
-    <div class="who">${art(s,"",42)}<div style="min-width:0"><div class="nm">${esc(s.name)}</div><div class="sb">${esc(tagsOf(s,3).join(", ") || "Rádio")}</div></div></div>
+    <div class="who">${art(s,"",42)}<div style="min-width:0"><div class="nm">${esc(s.name)}</div><div class="sb">${isBad(s) ? `<span class="bad-tag">Não respondeu da última vez</span>` : esc(tagsOf(s,3).join(", ") || "Rádio")}</div></div></div>
     <span class="loc">${esc(place(s))}</span><span class="q" style="display:flex; align-items:center; justify-content:flex-end; gap:6px">${s.bitrate ? s.bitrate + " kbps" : ""}<span class="more" role="button" tabindex="0" aria-label="Mais opções">${DOTS}</span></span></button>`).join("");
   hydrate(box);
   wireRows(box, list);
@@ -829,14 +928,14 @@ function play(s, list, isRetry){
   if (!s) return;
   if (!isRetry){ retries = 0; clearTimeout(retryT); }
   if (list) queue = list;
-  if (!same(s,current)) lastSong = "";
+  if (!same(s,current)){ lastSong = ""; cover = null; }
   powered = true; current = s;
   if (hls){ hls.destroy(); hls = null; }
   let url = s.url_resolved;
-  const upgraded = location.protocol === "https:" && url.startsWith("http:");
-  if (upgraded) url = "https:" + url.slice(5);
-  audio.dataset.upgraded = upgraded ? "1" : "";
   const isHls = s.hls == 1 || /\.m3u8(\?|$)/i.test(url);
+  // rádios só em http: num site https o navegador bloqueia; passam pelo serviço no Cloudflare
+  if (httpsPage && /^http:/i.test(url) && !isHls) url = SVC + "stream?url=" + encodeURIComponent(url);
+  else if (httpsPage && /^http:/i.test(url)) url = "https:" + url.slice(5);
   if (isHls && window.Hls && Hls.isSupported() && !audio.canPlayType("application/vnd.apple.mpegurl")){
     hls = new Hls(); hls.loadSource(url); hls.attachMedia(audio);
     hls.on(Hls.Events.ERROR, (ev, d) => { if (d.fatal && powered && !reconnect()){ powered = false; setState("off", "Esta rádio não respondeu"); } });
@@ -879,7 +978,7 @@ function reconnect(){
   retryT = setTimeout(() => { if (powered && current) play(current, null, true); }, wait*1000);
   return true;
 }
-audio.addEventListener("playing", () => { retries = 0; clearTimeout(stallT); clearTimeout(retryT); setState("on"); });
+audio.addEventListener("playing", () => { markBad(current, false); retries = 0; clearTimeout(stallT); clearTimeout(retryT); setState("on"); });
 audio.addEventListener("waiting", () => {
   if (!powered) return; setState("busy");
   clearTimeout(stallT); stallT = setTimeout(() => { if (powered && audio.paused === false && audio.readyState < 3) reconnect(); }, 15000);
@@ -889,11 +988,12 @@ audio.addEventListener("ended", () => { if (powered) reconnect(); });
 window.addEventListener("online", () => { if (powered && state !== "on"){ retries = 0; clearTimeout(retryT); play(current, null, true); } });
 audio.addEventListener("error", () => {
   if (!powered || !audio.getAttribute("src")) return;
-  if (!audio.dataset.upgraded && state === "on" && reconnect()) return;   // estava a tocar e caiu: tenta de novo
-  if (!audio.dataset.upgraded && retries > 0 && reconnect()) return;
+  if (state === "on" && reconnect()) return;   // estava a tocar e caiu: tenta de novo
+  if (retries > 0 && reconnect()) return;
   powered = false; retries = 0;
-  setState("off", audio.dataset.upgraded ? "Só toca no arquivo radio.html (rádio sem https)" : "Esta rádio não respondeu");
-  toast(audio.dataset.upgraded ? "Esta rádio só transmite sem segurança. Abra-a no arquivo radio.html." : "Esta rádio não respondeu. Experimente outra.");
+  markBad(current, true);
+  setState("off", "Esta rádio não respondeu");
+  toast("Esta rádio não respondeu. Experimente outra.");
 });
 
 function refreshNow(){
@@ -905,7 +1005,9 @@ function refreshNow(){
   if ($("#plArt").dataset.id !== s.stationuuid){
     paint($("#plArt"), s, 56); $("#plArt").dataset.id = s.stationuuid;
     paint($("#npArt"), s, 288); $("#npArt").dataset.id = s.stationuuid;
+    showCover();
   }
+  if (!lastSong && $("#npArt").querySelector(".cover")) showCover();
   $("#plName").textContent = s.name;
   const sub = $("#plSub");
   sub.textContent = lastSong || place(s) || "Rádio";
@@ -947,7 +1049,7 @@ async function pollSong(first){
   try{
     const r = await fetch(NOWPLAYING + "?url=" + encodeURIComponent(s.url_resolved));
     const { title } = await r.json();
-    if (same(s,current)){ const t = clean(title, s.name); if (t !== lastSong){ lastSong = t; logSong(t, s); refreshNow(); } }
+    if (same(s,current)){ const t = clean(title, s.name); if (t !== lastSong){ lastSong = t; cover = null; logSong(t, s); refreshNow(); loadCover(t, s); } }
   }catch(e){}
   songT = setTimeout(() => pollSong(false), first ? 12000 : 20000);
 }
@@ -961,12 +1063,42 @@ function mediaMeta(){
   try{
     let title = current.name, artist = "Minha Rádio";
     if (lastSong){ const [a,...r] = lastSong.split(" - "); if (r.length){ artist = a + " · " + current.name; title = r.join(" - "); } else { title = lastSong; artist = current.name; } }
-    navigator.mediaSession.metadata = new MediaMetadata({title, artist, artwork: /^https?:/.test(current.favicon) ? [{src:current.favicon}] : [{src:"icon-512.png", sizes:"512x512"}]});
+    navigator.mediaSession.metadata = new MediaMetadata({title, artist, artwork: cover && lastSong ? [{src:cover, sizes:"600x600"}] : logoMemo[current.stationuuid] && !logoMemo[current.stationuuid].startsWith("-:") ? [{src:logoMemo[current.stationuuid]}] : [{src:"icon-512.png", sizes:"512x512"}]});
     navigator.mediaSession.setActionHandler("play", () => play(current));
     navigator.mediaSession.setActionHandler("pause", stop);
     navigator.mediaSession.setActionHandler("nexttrack", () => step(1));
     navigator.mediaSession.setActionHandler("previoustrack", () => step(-1));
   }catch(e){}
+}
+
+/* ---------- capa do álbum (iTunes, através do serviço) ---------- */
+let cover = null;
+async function loadCover(t, s){
+  try{
+    const r = await fetch(SVC + "cover?q=" + encodeURIComponent(t.replace(/\s-\s/, " ").replace(/\(.*?\)|\[.*?\]/g, "")));
+    const d = await r.json();
+    if (!d.art || lastSong !== t || !same(s, current)) return;
+    cover = d.art;
+    const e = songs.find(x => x.t === t && x.id === s.stationuuid); if (e && !e.art){ e.art = d.art; store.set("radio.songs", songs); if (view.name === "songs") render(); }
+    showCover();
+  }catch(e){}
+}
+function showCover(){
+  ["#plArt", "#npArt"].forEach(sel => {
+    const el = $(sel); if (!el) return;
+    el.querySelectorAll(".cover,.badge").forEach(x => x.remove());
+    if (!cover || !lastSong) return;
+    const img = new Image(); img.className = "cover"; img.alt = ""; img.referrerPolicy = "no-referrer";
+    img.onerror = () => img.remove(); img.src = cover; el.appendChild(img);
+    if (sel === "#npArt" && current){            // logo da rádio no canto da capa
+      const b = document.createElement("div"); b.className = "badge"; b.style.setProperty("--bh", hueOf(current.name));
+      const tmp = document.createElement("div"); tmp.innerHTML = art(current, "", 70);
+      const a = tmp.firstChild; b.innerHTML = a.innerHTML; b.dataset.src = a.dataset.src; b.dataset.id = a.dataset.id; b.classList.add("art");
+      b.style.cssText += "; position:absolute; --s:70px"; b.querySelector(".mono") && (b.querySelector(".mono").style.fontSize = "18px");
+      el.appendChild(b); hydrate(el);
+    }
+  });
+  mediaMeta();
 }
 
 /* ======================= músicas que tocaram ======================= */
@@ -1005,8 +1137,8 @@ function renderSongs(c){
     const title = r.length ? r.join(" - ") : x.t, artist = r.length ? a : "";
     const hm = new Date(x.at).toLocaleTimeString("pt-PT", {hour:"2-digit", minute:"2-digit"});
     html += `<div class="sg"><span class="when">${hm}</span>
-      <div style="min-width:0"><div class="nm">${esc(title)}</div><div class="sb">${esc(artist || "—")}</div></div>
-      <div class="st">${art({name:x.st, favicon:x.fav}, "", 28)}<span>${esc(x.st)}</span></div>
+      <div class="ttl">${x.art ? `<img class="cv" src="${esc(x.art.replace("600x600","100x100"))}" alt="" loading="lazy" referrerpolicy="no-referrer">` : ""}<div style="min-width:0"><div class="nm">${esc(title)}</div><div class="sb">${esc(artist || "—")}</div></div></div>
+      <div class="st">${art({stationuuid:x.id, name:x.st, favicon:x.fav}, "", 28)}<span>${esc(x.st)}</span></div>
       <a href="https://open.spotify.com/search/${encodeURIComponent(x.t.replace(/\s-\s/," "))}" target="_blank" rel="noopener">Spotify</a></div>`;
   });
   $("#songRows").innerHTML = html; hydrate($("#songRows"));
@@ -1099,6 +1231,69 @@ $("#menu").addEventListener("keydown", e => {
 $("#plMore").onclick = e => { e.stopPropagation(); const r = $("#plMore").getBoundingClientRect(); openMenu(current, r.left, r.top - 8 - 300, queue); };
 $("#plArt").addEventListener?.("contextmenu", e => { e.preventDefault(); openMenu(current, e.clientX, e.clientY, queue); });
 
+/* ======================= cópia de segurança ======================= */
+function showPlainMenu(title, items, x, y){
+  const m = $("#menu");
+  m.innerHTML = `<div class="mh"><div style="min-width:0"><b>${esc(title)}</b></div></div>` + items.map((it,k) => `<button role="menuitem" data-k="${k}">${MI[it[0]]}<span>${esc(it[1])}</span></button>`).join("");
+  m.querySelectorAll("button[data-k]").forEach(b => b.onclick = e => { e.stopPropagation(); closeMenu(); items[+b.dataset.k][2](); });
+  m.hidden = false;
+  const r = m.getBoundingClientRect();
+  m.style.left = Math.max(8, Math.min(x, innerWidth - r.width - 8)) + "px";
+  m.style.top = Math.max(8, Math.min(y, innerHeight - r.height - 8)) + "px";
+  m.querySelector("button")?.focus();
+}
+function exportBackup(){
+  const data = {app:"minha-radio", version:2, saved:new Date().toISOString(), slots, recent, songs, country, bank, volume:audio.volume};
+  const blob = new Blob([JSON.stringify(data)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `minha-radio-copia-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast("Cópia de segurança descarregada");
+}
+let pendingImport = null;
+$("#importFile").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  try{
+    const d = JSON.parse(await f.text());
+    if (d.app !== "minha-radio" || !Array.isArray(d.slots)) throw 0;
+    pendingImport = d;
+    const n = d.slots.filter(Boolean).length, now = slots.filter(Boolean).length;
+    $("#cfText").textContent = `Esta cópia tem ${n} ${n === 1 ? "rádio" : "rádios"} nas memórias${d.saved ? `, guardada em ${new Date(d.saved).toLocaleDateString("pt-PT")}` : ""}. As suas ${now} memórias atuais são substituídas. O histórico de rádios e de músicas é juntado ao que já tem.`;
+    $("#confirmModal").hidden = false; $("#cfYes").focus();
+  }catch(err){ toast("Este arquivo não é uma cópia do Minha Rádio"); }
+};
+$("#cfNo").onclick = () => { pendingImport = null; $("#confirmModal").hidden = true; };
+$("#confirmModal").onclick = e => { if (e.target.id === "confirmModal") $("#cfNo").click(); };
+$("#cfYes").onclick = () => {
+  const d = pendingImport; if (!d) return;
+  slots = d.slots.slice(0, BANKS.length*PER).map(x => x ? slim(x) : null);
+  while (slots.length < BANKS.length*PER) slots.push(null);
+  const seen = new Set();
+  recent = [...recent, ...(d.recent || []).map(slim)].filter(s => s && !seen.has(s.stationuuid) && seen.add(s.stationuuid)).slice(0, 30);
+  const sk = new Set();
+  songs = [...songs, ...(d.songs || [])].filter(x => x && x.t && !sk.has(x.at + x.t) && sk.add(x.at + x.t)).sort((a,b) => b.at - a.at).slice(0, 300);
+  store.set("radio.slots", slots); store.set("radio.recent", recent); store.set("radio.songs", songs);
+  pendingImport = null; $("#confirmModal").hidden = true;
+  renderLib(); renderQuick(); render(); syncSave(); refreshSaved();
+  toast("Memórias importadas");
+};
+const MI_EXTRA = {
+  down:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>`,
+  up:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V9m0 0-4 4m4-4 4 4M5 4h14"/></svg>`
+};
+Object.assign(MI, MI_EXTRA);
+$("#libMore").onclick = e => {
+  e.stopPropagation();
+  const r = $("#libMore").getBoundingClientRect();
+  showPlainMenu("Cópia de segurança", [
+    ["down", "Exportar memórias e histórico", exportBackup],
+    ["up", "Importar de um arquivo…", () => $("#importFile").click()]
+  ], r.left, r.bottom + 6);
+};
+
 /* ======================= rádios parecidas ======================= */
 const simCache = {};
 let simFor = "";
@@ -1150,6 +1345,8 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !$("#picker").hidden){ closePicker(); return; }
   if (e.key === "Escape" && !$("#sleep").hidden){ $("#sleep").hidden = true; return; }
   if (e.key === "Escape" && !$("#helpModal").hidden){ showHelp(false); return; }
+  if (e.key === "Escape" && !$("#confirmModal").hidden){ $("#cfNo").click(); return; }
+  if (!$("#confirmModal").hidden) return;
   if (e.key === "Escape" && !$("#menu").hidden){ closeMenu(); return; }
   if (!$("#helpModal").hidden) return;
   if (t.tagName === "INPUT" && t.type !== "range") return;
@@ -1171,6 +1368,7 @@ document.addEventListener("keydown", e => {
 
 /* ======================= início ======================= */
 volUI(); renderLib(); refreshNow(); go({name:"home"}, false);
+setTimeout(refreshSaved, 1500);
 if (current) setState("off", "Carregue em ▶ para ouvir");
 </script>
 </body>
