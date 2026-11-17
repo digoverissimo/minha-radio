@@ -245,6 +245,60 @@
   .picker-foot{margin-top:10px; font-size:12px; color:var(--mut)}
   .picker-foot button{color:var(--txt); text-decoration:underline; font-size:12px}
 
+  /* menu de contexto (botão direito ou ⋯) */
+  .menu{position:fixed; z-index:60; min-width:230px; max-width:300px; background:var(--raise); border-radius:8px; padding:4px;
+    box-shadow:0 16px 40px rgba(0,0,0,.6); animation:pop .12s ease-out}
+  .menu .mh{display:flex; align-items:center; gap:10px; padding:8px 10px 10px; border-bottom:1px solid var(--line); margin-bottom:4px}
+  .menu .mh .art{width:36px; height:36px; border-radius:4px; --s:36px; flex:none}
+  .menu .mh b{display:block; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .menu .mh small{color:var(--mut); font-size:12px}
+  .menu button{display:flex; align-items:center; gap:12px; width:100%; padding:9px 10px; border-radius:4px; text-align:left; font-size:14px}
+  .menu button:hover,.menu button:focus-visible{background:#2D323A; outline:0}
+  .menu button svg{width:16px; height:16px; color:var(--mut); flex:none}
+  .menu hr{border:0; border-top:1px solid var(--line); margin:4px 0}
+  .more{width:30px; height:30px; border-radius:50%; display:grid; place-items:center; color:var(--mut); opacity:0}
+  .more svg{width:18px; height:18px}
+  .tr:hover .more,.tr:focus-within .more,.more:focus-visible{opacity:1}
+  .more:hover{color:var(--txt)}
+  /* setas das prateleiras */
+  .shelf-nav{display:flex; gap:6px; margin-left:8px}
+  .shelf-nav button{width:30px; height:30px; border-radius:50%; background:rgba(0,0,0,.45); display:grid; place-items:center; color:var(--txt); margin:0; text-decoration:none !important}
+  .shelf-nav button:disabled{opacity:.3; cursor:default}
+  .shelf-nav svg{width:16px; height:16px}
+  /* melhor resultado */
+  .best-wrap{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; margin:6px 0 26px}
+  .best-wrap h3{margin:0 0 10px; font-size:22px; font-weight:700; letter-spacing:-.4px}
+  .best{position:relative; display:block; width:100%; text-align:left; padding:20px; border-radius:8px; background:var(--hover); transition:background .2s}
+  .best:hover{background:var(--raise)}
+  .best .art{width:96px; height:96px; border-radius:8px; --s:96px; box-shadow:0 8px 24px rgba(0,0,0,.45)}
+  .best .nm{margin-top:18px; font-size:28px; font-weight:700; letter-spacing:-.6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .best .sb{color:var(--mut); margin-top:4px}
+  .best .pill{display:inline-block; margin-left:6px; padding:2px 9px; border-radius:999px; background:var(--black); color:var(--txt); font-size:12px; font-weight:600}
+  .best .fab{position:absolute; right:20px; bottom:20px; opacity:0; translate:0 8px}
+  .best:hover .fab,.best:focus-visible .fab,.best[aria-current="true"] .fab{opacity:1; translate:0 0}
+  .best-side .tr{grid-template-columns:minmax(0,1fr) 30px} .best-side .q{display:none}
+  @media (max-width:980px){ .best-wrap{grid-template-columns:1fr} }
+  /* rádios parecidas no painel */
+  .sim{display:flex; align-items:center; gap:10px; width:100%; padding:6px; margin:0 -6px; border-radius:6px; text-align:left}
+  .sim:hover{background:#2D323A}
+  .sim .art{width:40px; height:40px; border-radius:4px; --s:40px; flex:none}
+  .sim .nm{font-weight:500; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .sim .sb{font-size:12px; color:var(--mut); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  /* biblioteca: posições livres resumidas */
+  .lib-free{margin:6px 8px 0; padding:12px; border-radius:6px; border:1px dashed var(--line); color:var(--mut); font-size:13px; line-height:1.4}
+  .lib-free b{color:var(--txt); font-weight:600}
+  .chip .cnt{margin-left:5px; font-size:11px; opacity:.6}
+  /* atalhos */
+  .modal{position:fixed; inset:0; z-index:70; background:rgba(0,0,0,.6); display:grid; place-items:center; animation:fade .15s}
+  @keyframes fade{from{opacity:0}}
+  .modal-box{width:min(520px,92vw); background:var(--panel); border-radius:12px; padding:22px 24px; box-shadow:0 30px 70px rgba(0,0,0,.6)}
+  .modal-box h2{margin:0 0 16px; font-size:20px; display:flex; align-items:center}
+  .modal-box h2 button{margin-left:auto; color:var(--mut)}
+  .keys-list{display:grid; grid-template-columns:auto 1fr; gap:10px 18px; align-items:center; font-size:14px}
+  .keys-list span:nth-child(odd){display:flex; gap:4px; justify-content:flex-end}
+  kbd{font:inherit; font-size:12px; min-width:24px; text-align:center; padding:2px 7px; border-radius:5px; background:var(--raise); border:1px solid var(--line); border-bottom-width:2px}
+  .help{width:34px; height:34px; border-radius:50%; background:rgba(0,0,0,.45); display:grid; place-items:center; color:var(--mut); font-weight:700; flex:none}
+  .help:hover{color:var(--txt)}
   .sleep{position:fixed; right:12px; bottom:92px; z-index:30; width:230px; background:var(--raise); border-radius:10px; padding:8px;
     box-shadow:0 20px 50px rgba(0,0,0,.6); animation:pop .14s ease-out}
   .sleep h4{margin:6px 8px 8px; font-size:13px; color:var(--mut); font-weight:500}
@@ -323,6 +377,7 @@
         <button class="chip" data-cc="BR">Brasil</button>
         <button class="chip" data-cc="">Mundo</button>
       </div>
+      <button class="help" id="helpBtn" aria-label="Atalhos de teclado" title="Atalhos de teclado (?)">?</button>
     </div>
     <div class="content" id="content"></div>
   </main>
@@ -339,6 +394,10 @@
         <div class="song none" id="npSong">Esta rádio não informa a música.</div>
         <a id="npSpot" target="_blank" rel="noopener" hidden>Abrir no Spotify</a>
       </div>
+      <div class="np-card" id="npSimCard" hidden>
+        <h4 id="npSimTitle">Rádios parecidas</h4>
+        <div id="npSim"></div>
+      </div>
       <div class="np-card">
         <h4>Sobre a estação</h4>
         <div id="npAbout" style="color:var(--mut); font-size:13px; margin-bottom:10px"></div>
@@ -352,6 +411,7 @@
     <div class="pl-now">
       <div class="art" id="plArt"><span class="mono">♪</span></div>
       <div class="tx"><div class="nm" id="plName">Nada a tocar</div><div class="sb" id="plSub">Minha Rádio</div></div>
+      <button class="icon-btn" id="plMore" aria-label="Mais opções" title="Mais opções" disabled><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
       <button class="icon-btn" id="save" aria-label="Guardar nas memórias" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button>
     </div>
     <div class="pl-mid">
@@ -379,8 +439,27 @@
   </footer>
 </div>
 
+<div class="menu" id="menu" role="menu" hidden></div>
+<div class="modal" id="helpModal" hidden>
+  <div class="modal-box" role="dialog" aria-labelledby="helpTitle">
+    <h2 id="helpTitle">Atalhos de teclado<button id="helpClose" aria-label="Fechar">✕</button></h2>
+    <div class="keys-list">
+      <span><kbd>espaço</kbd></span><span>Ligar e desligar a rádio</span>
+      <span><kbd>←</kbd><kbd>→</kbd></span><span>Rádio anterior e seguinte da lista</span>
+      <span><kbd>1</kbd>–<kbd>8</kbd></span><span>Tocar a memória do banco aberto</span>
+      <span><kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd></span><span>Mudar de banco de memórias</span>
+      <span><kbd>S</kbd></span><span>Guardar a rádio que está a tocar</span>
+      <span><kbd>M</kbd></span><span>Silenciar</span>
+      <span><kbd>↑</kbd><kbd>↓</kbd></span><span>Volume</span>
+      <span><kbd>/</kbd></span><span>Procurar</span>
+      <span><kbd>H</kbd></span><span>Ir para o Início</span>
+      <span><kbd>?</kbd></span><span>Mostrar estes atalhos</span>
+    </div>
+    <p style="margin:16px 0 0; color:var(--mut); font-size:13px">Clique com o botão direito em qualquer rádio para ver mais opções.</p>
+  </div>
+</div>
 <div class="picker" id="picker" hidden>
-  <div class="picker-head"><span>Guardar em</span><div class="chips" id="pkBanks"></div></div>
+  <div class="picker-head"><span id="pickTitle" style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">Guardar em</span><div class="chips" id="pkBanks"></div></div>
   <div class="pk-grid" id="pkGrid"></div>
   <div class="picker-foot" id="pkFoot"></div>
 </div>
@@ -407,7 +486,7 @@ const store = {
   set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch{} }
 };
 const slim = s => s && ({stationuuid:s.stationuuid, name:(s.name||"").trim(), url_resolved:s.url_resolved, favicon:s.favicon||"",
-  country:s.country, state:s.state, tags:s.tags, bitrate:s.bitrate, hls:s.hls, codec:s.codec});
+  country:s.country, countrycode:s.countrycode, state:s.state, tags:s.tags, bitrate:s.bitrate, hls:s.hls, codec:s.codec, homepage:/^https?:/.test(s.homepage||"") ? s.homepage : ""});
 const same = (a,b) => !!(a && b && a.stationuuid === b.stationuuid);
 const esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -457,6 +536,7 @@ const slotLabel = i => BANKS[Math.floor(i/PER)] + (i%PER + 1);
 const slotOf = s => slots.findIndex(x => same(x,s));
 const PLAY = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
 const PAUSE = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>`;
+const DOTS = `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>`;
 const EQ = `<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>`;
 let toastT;
 function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(()=>el.classList.remove("show"), 2000); }
@@ -505,8 +585,8 @@ async function renderHome(c){
     <h1 class="greet">${greeting()}, Digão</h1>
     <div class="bank-row"><span class="lbl">Memórias</span><div class="chips" style="padding:0" id="homeBanks"></div></div>
     <div class="quick" id="quick"></div>
-    ${recent.length ? `<section class="shelf"><div class="shelf-head"><h2>Ouvidas recentemente</h2><button data-open="recent">Mostrar tudo</button></div><div class="cards" id="shRecent"></div></section>` : ""}
-    <section class="shelf"><div class="shelf-head"><h2>Mais ouvidas em ${CN[country]}</h2><button data-open="top">Mostrar tudo</button></div><div class="cards" id="shTop">${skCards()}</div></section>
+    ${recent.length ? `<section class="shelf"><div class="shelf-head"><h2>Ouvidas recentemente</h2><button data-open="recent">Mostrar tudo</button>${navBtns("shRecent")}</div><div class="cards" id="shRecent"></div></section>` : ""}
+    <section class="shelf"><div class="shelf-head"><h2>Mais ouvidas em ${CN[country]}</h2><button data-open="top">Mostrar tudo</button>${navBtns("shTop")}</div><div class="cards" id="shTop">${skCards()}</div></section>
     <section class="shelf"><div class="shelf-head"><h2>Navegar por gênero</h2></div><div class="genres" id="genres"></div></section>`;
   renderQuick();
   if (recent.length) fillCards($("#shRecent"), recent.slice(0,12), recent);
@@ -519,13 +599,33 @@ async function renderHome(c){
     if (view.name === "home" && $("#shTop")) fillCards($("#shTop"), list.slice(0,14), list);
   }catch(e){ if ($("#shTop")) $("#shTop").innerHTML = `<div class="note" style="text-align:left; padding:10px"><b>Sem ligação ao catálogo</b>Confira a internet e volte ao Início.</div>`; }
 }
+const ARROW_L = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 5-7 7 7 7"/></svg>`;
+const ARROW_R = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 5 7 7-7 7"/></svg>`;
+function navBtns(id){ return `<span class="shelf-nav"><button data-nav="${id}" data-d="-1" aria-label="Recuar">${ARROW_L}</button><button data-nav="${id}" data-d="1" aria-label="Avançar">${ARROW_R}</button></span>`; }
+function wireShelf(box){
+  if (!box) return;
+  const btns = document.querySelectorAll(`[data-nav="${box.id}"]`);
+  const sync = () => {
+    const max = box.scrollWidth - box.clientWidth - 2;
+    btns.forEach(b => b.disabled = b.dataset.d === "-1" ? box.scrollLeft <= 2 : box.scrollLeft >= max);
+    btns[0] && (btns[0].parentNode.style.visibility = max > 0 ? "" : "hidden");
+  };
+  btns.forEach(b => b.onclick = () => box.scrollBy({left: +b.dataset.d * box.clientWidth * .85, behavior:"smooth"}));
+  box.onscroll = sync; sync();
+}
+window.addEventListener("resize", () => document.querySelectorAll(".cards[id]").forEach(wireShelf));
 function skCards(){ return Array.from({length:7}, () => `<div class="card"><div class="sk" style="aspect-ratio:1"></div><div class="sk" style="height:12px; margin-top:12px; width:70%"></div></div>`).join(""); }
 function fillCards(box, list, q){
   box.innerHTML = list.map((s,i) => `<button class="card" data-i="${i}" aria-current="${same(s,current)}">
      <div class="cv">${art(s,"",150)}<span class="fab">${isLive(s) ? PAUSE : PLAY}</span></div>
      <div class="nm">${esc(s.name)}</div><div class="sb">${esc(place(s) || tagsOf(s,2).join(", "))}</div></button>`).join("");
   hydrate(box);
-  box.querySelectorAll(".card").forEach(b => b.onclick = () => { const s = list[+b.dataset.i]; isLive(s) ? stop() : play(s, q); });
+  box.querySelectorAll(".card").forEach(b => {
+    const s = list[+b.dataset.i];
+    b.onclick = () => isLive(s) ? stop() : play(s, q);
+    b.oncontextmenu = e => { e.preventDefault(); openMenu(s, e.clientX, e.clientY, q); };
+  });
+  wireShelf(box);
 }
 function renderQuick(){
   const box = $("#quick"); if (!box) return;
@@ -535,7 +635,11 @@ function renderQuick(){
   const list = slots.slice(bank*PER, bank*PER+PER);
   box.innerHTML = list.map((s,k) => {
     const i = bank*PER + k;
-    if (!s) return `<div class="qk empty" data-slot="${i}"><div class="art" style="--s:64px"><span class="mono" style="font-size:14px">${slotLabel(i)}</span></div><span class="nm">Posição livre</span></div>`;
+    if (!s){
+      if (list.findIndex(x => !x) !== k) return "";        // só mostra a primeira posição livre
+      const free = list.filter(x => !x).length;
+      return `<div class="qk empty" data-slot="${i}"><div class="art" style="--s:64px"><span class="mono" style="font-size:22px">+</span></div><span class="nm">${free} ${free === 1 ? "posição livre" : "posições livres"} · tecla S guarda a rádio a tocar</span></div>`;
+    }
     return `<button class="qk" data-slot="${i}" aria-current="${same(s,current)}" draggable="true">${art(s,"",64)}<span class="nm">${esc(s.name)}</span><span class="tag">${slotLabel(i)}</span><span class="fab">${isLive(s) ? PAUSE : PLAY}</span></button>`;
   }).join("");
   hydrate(box);
@@ -557,6 +661,7 @@ async function renderList(c){
     </div>
     <div class="actions"><button class="fab" id="playAll" aria-label="Tocar a primeira">${PLAY}</button>
       <button class="ghost" id="shuffleAll"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Ao acaso</button></div>
+    <div id="bestBox"></div>
     <div class="thead"><span style="text-align:right">#</span><span>Rádio</span><span>Local</span><span style="text-align:right">Qualidade</span></div>
     <div id="rows">${Array.from({length:10},()=>`<div class="tr"><span></span><div class="who"><div class="sk" style="width:42px;height:42px"></div><div style="flex:1"><div class="sk" style="height:11px;width:50%"></div></div></div></div>`).join("")}</div>`;
   let list;
@@ -577,6 +682,7 @@ async function renderList(c){
       : `<div class="note"><b>Nada por aqui ainda</b>${v.kind === "recent" ? "As rádios que ouvir aparecem aqui." : "Escolha outro gênero ou país."}</div>`;
     return;
   }
+  if (v.kind === "query") drawBest(list);
   drawRows(list);
   $("#playAll").onclick = () => { const live = list.find(isLive); live ? stop() : play(list[0], list); };
   $("#shuffleAll").onclick = () => play(list[Math.floor(Math.random()*list.length)], list);
@@ -587,11 +693,40 @@ function drawRows(list){
   box.innerHTML = list.map((s,i) => `<button class="tr" data-i="${i}" aria-current="${same(s,current)}">
     <span class="n"><span class="num">${isLive(s) ? EQ : i+1}</span><span class="pl">${PLAY}</span></span>
     <div class="who">${art(s,"",42)}<div style="min-width:0"><div class="nm">${esc(s.name)}</div><div class="sb">${esc(tagsOf(s,3).join(", ") || "Rádio")}</div></div></div>
-    <span class="loc">${esc(place(s))}</span><span class="q">${s.bitrate ? s.bitrate + " kbps" : ""}</span></button>`).join("");
+    <span class="loc">${esc(place(s))}</span><span class="q" style="display:flex; align-items:center; justify-content:flex-end; gap:6px">${s.bitrate ? s.bitrate + " kbps" : ""}<span class="more" role="button" tabindex="0" aria-label="Mais opções">${DOTS}</span></span></button>`).join("");
   hydrate(box);
-  box.querySelectorAll(".tr").forEach(b => b.onclick = () => play(list[+b.dataset.i], list));
+  wireRows(box, list);
+}
+function wireRows(box, list){
+  box.querySelectorAll(".tr").forEach(b => {
+    const s = list[+b.dataset.i];
+    b.onclick = e => {
+      const m = e.target.closest(".more");
+      if (m){ e.stopPropagation(); const r = m.getBoundingClientRect(); openMenu(s, r.right, r.bottom + 4, list); return; }
+      play(s, list);
+    };
+    b.oncontextmenu = e => { e.preventDefault(); openMenu(s, e.clientX, e.clientY, list); };
+  });
 }
 function syncPlayAll(){ const b = $("#playAll"); if (b && view.list) b.innerHTML = view.list.some(isLive) ? PAUSE : PLAY; }
+
+function drawBest(list){
+  const box = $("#bestBox"); if (!box || !list.length) return;
+  const b = list[0], top = list.slice(1, 5);
+  box.innerHTML = `<div class="best-wrap">
+    <div><h3>Melhor resultado</h3>
+      <button class="best" aria-current="${same(b,current)}">${art(b,"",96)}<div class="nm">${esc(b.name)}</div>
+        <div class="sb">${esc(place(b) || "Rádio")}<span class="pill">Rádio</span></div><span class="fab">${isLive(b) ? PAUSE : PLAY}</span></button></div>
+    ${top.length ? `<div class="best-side"><h3>Rádios</h3><div id="bestRows">${top.map((s,i) => `<button class="tr" data-i="${i}" aria-current="${same(s,current)}">
+        <div class="who">${art(s,"",42)}<div style="min-width:0"><div class="nm">${esc(s.name)}</div><div class="sb">${esc(place(s) || tagsOf(s,2).join(", "))}</div></div></div>
+        <span class="q">${s.bitrate ? s.bitrate + " kbps" : ""}</span><span class="more" role="button" tabindex="0" aria-label="Mais opções">${DOTS}</span></button>`).join("")}</div></div>` : ""}
+  </div>`;
+  hydrate(box);
+  const bb = box.querySelector(".best");
+  bb.onclick = () => isLive(b) ? stop() : play(b, list);
+  bb.oncontextmenu = e => { e.preventDefault(); openMenu(b, e.clientX, e.clientY, list); };
+  if ($("#bestRows")) wireRows($("#bestRows"), top);
+}
 
 /* ---------- busca ---------- */
 function renderSearch(c){
@@ -618,17 +753,19 @@ document.querySelectorAll("#countryChips .chip").forEach(b => b.onclick = () => 
 /* ======================= biblioteca (lateral) ======================= */
 function setBank(b){ bank = b; store.set("radio.bank", b); renderLib(); renderQuick(); renderPicker(); }
 function renderLib(){
-  $("#libBanks").innerHTML = BANKS.map((L,bi) => `<button class="chip" data-b="${bi}" aria-pressed="${bi === bank}" aria-label="Banco ${L}" style="min-width:44px">${L}</button>`).join("");
+  $("#libBanks").innerHTML = BANKS.map((L,bi) => `<button class="chip" data-b="${bi}" aria-pressed="${bi === bank}" aria-label="Banco ${L}" style="min-width:44px">${L}${slots.slice(bi*PER, bi*PER+PER).some(Boolean) ? `<span class="cnt">${slots.slice(bi*PER, bi*PER+PER).filter(Boolean).length}</span>` : ""}</button>`).join("");
   $("#libBanks").querySelectorAll("button").forEach(b => {
     b.onclick = () => setBank(+b.dataset.b);
     b.ondragover = e => { if (dragFrom >= 0 && +b.dataset.b !== bank){ e.preventDefault(); setBank(+b.dataset.b); } };
   });
   const box = $("#libList");
-  box.innerHTML = slots.slice(bank*PER, bank*PER+PER).map((s,k) => {
+  const inBank = slots.slice(bank*PER, bank*PER+PER);
+  const free = inBank.filter(x => !x).length;
+  box.innerHTML = inBank.map((s,k) => {
     const i = bank*PER + k;
-    if (!s) return `<div class="li empty" data-slot="${i}"><div class="art" style="--s:48px"><span class="mono" style="font-size:13px">${slotLabel(i)}</span></div><div class="tx"><div class="nm">Posição livre</div></div></div>`;
+    if (!s) return "";
     return `<button class="li" data-slot="${i}" aria-current="${same(s,current)}" draggable="true">${art(s,"",48)}<div class="tx"><div class="nm">${esc(s.name)}</div><div class="sb">Memória ${slotLabel(i)} · ${esc(s.country || "Rádio")}</div></div>${isLive(s) ? `<span class="vol-ic">${EQ}</span>` : ""}</button>`;
-  }).join("");
+  }).join("") + (free ? `<div class="lib-free">${free === PER ? `<b>Banco ${BANKS[bank]} vazio.</b> ` : `<b>${free} ${free === 1 ? "posição livre" : "posições livres"}</b> no banco ${BANKS[bank]}. `}Para guardar, toque numa rádio e use o <b>⊕</b> no leitor, ou a tecla <kbd>S</kbd>.</div>` : "");
   hydrate(box);
   box.querySelectorAll("[data-slot]").forEach(el => wireSlot(el, +el.dataset.slot));
 }
@@ -639,8 +776,8 @@ function wireSlot(el, i){
     el.onclick = () => isLive(s) ? stop() : play(s, slots.filter(Boolean));
     el.ondragstart = e => { dragFrom = i; el.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; };
     el.ondragend = () => { el.classList.remove("dragging"); dragFrom = -1; };
-    el.oncontextmenu = e => { e.preventDefault(); slots[i] = null; saveSlots(); toast(`${slotLabel(i)} ficou livre`); };
-    el.title = `${s.name} (clique direito para tirar)`;
+    el.oncontextmenu = e => { e.preventDefault(); openMenu(s, e.clientX, e.clientY, slots.filter(Boolean)); };
+    el.title = `${s.name} (botão direito para mais opções)`;
   }
   el.ondragover = e => { if (dragFrom >= 0){ e.preventDefault(); el.classList.add("over"); } };
   el.ondragleave = () => el.classList.remove("over");
@@ -649,28 +786,32 @@ function wireSlot(el, i){
 function saveSlots(){ store.set("radio.slots", slots); renderLib(); renderQuick(); renderPicker(); syncSave(); }
 
 /* ======================= guardar ======================= */
+let pickTarget = null;   // rádio a guardar (por defeito, a que está a tocar)
 function renderPicker(){
+  const tgt = pickTarget || current;
   $("#pkBanks").innerHTML = BANKS.map((L,bi) => `<button class="chip" data-b="${bi}" aria-pressed="${bi === bank}">${L}</button>`).join("");
   $("#pkBanks").querySelectorAll("button").forEach(b => b.onclick = e => { e.stopPropagation(); setBank(+b.dataset.b); });
   const g = $("#pkGrid");
   g.innerHTML = slots.slice(bank*PER, bank*PER+PER).map((s,k) => {
     const i = bank*PER + k;
-    return s ? `<button class="pk filled ${same(s,current) ? "here" : ""}" data-slot="${i}" title="Substituir ${esc(s.name)}">${art(s,"",70)}<span class="lab">${slotLabel(i)}</span></button>`
+    return s ? `<button class="pk filled ${same(s,tgt) ? "here" : ""}" data-slot="${i}" title="Substituir ${esc(s.name)}">${art(s,"",70)}<span class="lab">${slotLabel(i)}</span></button>`
              : `<button class="pk" data-slot="${i}">${slotLabel(i)}</button>`;
   }).join("");
   hydrate(g);
   g.querySelectorAll(".pk").forEach(b => b.onclick = e => {
-    e.stopPropagation(); if (!current) return;
-    const i = +b.dataset.slot, prev = slotOf(current);
+    e.stopPropagation(); if (!tgt) return;
+    const i = +b.dataset.slot, prev = slotOf(tgt);
     if (prev >= 0) slots[prev] = null;
-    slots[i] = slim(current); saveSlots(); closePicker(); toast(`Guardada em ${slotLabel(i)}`);
+    slots[i] = slim(tgt); saveSlots(); closePicker(); toast(`${tgt.name} guardada em ${slotLabel(i)}`);
   });
-  const at = current ? slotOf(current) : -1;
+  const at = tgt ? slotOf(tgt) : -1;
+  $("#pickTitle") && ($("#pickTitle").textContent = tgt ? `Guardar ${tgt.name} em` : "Guardar em");
   $("#pkFoot").innerHTML = at >= 0 ? `Está em ${slotLabel(at)}. Escolha outra posição para mudar, ou <button id="pkRemove">tirar das memórias</button>.` : "Escolha uma posição. Se estiver ocupada, a rádio é substituída.";
   const r = $("#pkRemove"); if (r) r.onclick = e => { e.stopPropagation(); slots[at] = null; saveSlots(); closePicker(); toast("Tirada das memórias"); };
 }
-function closePicker(){ $("#picker").hidden = true; }
-$("#save").onclick = e => { e.stopPropagation(); if ($("#picker").hidden){ renderPicker(); $("#picker").hidden = false; } else closePicker(); };
+function closePicker(){ $("#picker").hidden = true; pickTarget = null; }
+function openPicker(s){ pickTarget = s || null; renderPicker(); $("#picker").hidden = false; }
+$("#save").onclick = e => { e.stopPropagation(); $("#picker").hidden ? openPicker() : closePicker(); };
 document.addEventListener("click", e => { if (!$("#picker").hidden && !e.target.closest("#picker")) closePicker(); });
 function syncSave(){
   const at = current ? slotOf(current) : -1;
@@ -757,7 +898,7 @@ audio.addEventListener("error", () => {
 
 function refreshNow(){
   const s = current;
-  ["#play","#prev","#next","#shuffle"].forEach(id => $(id).disabled = !s);
+  ["#play","#prev","#next","#shuffle","#plMore"].forEach(id => $(id).disabled = !s);
   syncSave();
   if (!s) return;
   document.documentElement.style.setProperty("--hue", hueOf(s.name));
@@ -783,6 +924,7 @@ function refreshNow(){
   $("#npTags").innerHTML = tagsOf(s, 6).map(t => `<button data-tag="${esc(t)}">${esc(t)}</button>`).join("");
   $("#npTags").querySelectorAll("button").forEach(b => b.onclick = () => go({name:"list", kind:"tag", tag:b.dataset.tag}));
   mediaMeta();
+  loadSimilar(s);
 }
 function refreshMarks(){
   renderLib(); renderQuick();
@@ -790,7 +932,7 @@ function refreshMarks(){
     const box = el.closest("#rows, .cards"); if (!box) return;
   });
   // redesenha as listas visíveis para atualizar o equalizador
-  if (view.name === "list" && view.list && view.list.length) { drawRows(view.list); syncPlayAll(); }
+  if (view.name === "list" && view.list && view.list.length) { if (view.kind === "query") drawBest(view.list); drawRows(view.list); syncPlayAll(); }
   if (view.name === "home"){
     if ($("#shRecent")) fillCards($("#shRecent"), recent.slice(0,12), recent);
     const top = topCache[country]; if (top && $("#shTop")) fillCards($("#shTop"), top.slice(0,14), top);
@@ -911,6 +1053,84 @@ function tickSleep(){
 $("#sleepBtn").onclick = e => { e.stopPropagation(); renderSleep(); $("#sleep").hidden = !$("#sleep").hidden; };
 document.addEventListener("click", e => { if (!$("#sleep").hidden && !e.target.closest("#sleep")) $("#sleep").hidden = true; });
 
+/* ======================= menu de contexto ======================= */
+const MI = {
+  play:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`,
+  stop:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>`,
+  save:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>`,
+  del:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>`,
+  tag:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12V3h9l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg>`,
+  copy:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>`,
+  web:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>`
+};
+function openMenu(s, x, y, list){
+  if (!s) return;
+  closePicker();
+  const m = $("#menu"), at = slotOf(s), tag = tagsOf(s,1)[0];
+  const items = [
+    ["play", isLive(s) ? "Desligar" : "Tocar agora", () => isLive(s) ? stop() : play(s, list)],
+    ["save", at >= 0 ? `Mudar de posição (está em ${slotLabel(at)})` : "Guardar nas memórias…", () => openPicker(s)],
+    at >= 0 ? ["del", `Tirar da memória ${slotLabel(at)}`, () => { slots[at] = null; saveSlots(); toast(`${slotLabel(at)} ficou livre`); }] : null,
+    "-",
+    tag ? ["tag", `Mais rádios de “${tag}”`, () => go({name:"list", kind:"tag", tag})] : null,
+    ["copy", "Copiar o nome", () => navigator.clipboard?.writeText(s.name).then(() => toast("Nome copiado"), () => toast("Não foi possível copiar"))],
+    s.homepage ? ["web", "Abrir o site da rádio", () => window.open(s.homepage, "_blank", "noopener")] : null
+  ].filter(Boolean);
+  m.innerHTML = `<div class="mh">${art(s,"",36)}<div style="min-width:0"><b>${esc(s.name)}</b><small>${esc(place(s) || "Rádio")}</small></div></div>`
+    + items.map((it,k) => it === "-" ? "<hr>" : `<button role="menuitem" data-k="${k}">${MI[it[0]]}<span>${esc(it[1])}</span></button>`).join("");
+  hydrate(m);
+  m.querySelectorAll("button[data-k]").forEach(b => b.onclick = e => { e.stopPropagation(); closeMenu(); items[+b.dataset.k][2](); });
+  m.hidden = false;
+  const r = m.getBoundingClientRect();
+  m.style.left = Math.max(8, Math.min(x, innerWidth - r.width - 8)) + "px";
+  m.style.top = Math.max(8, Math.min(y, innerHeight - r.height - 8)) + "px";
+  m.querySelector("button")?.focus();
+}
+function closeMenu(){ $("#menu").hidden = true; }
+document.addEventListener("click", e => { if (!$("#menu").hidden && !e.target.closest("#menu")) closeMenu(); });
+document.addEventListener("contextmenu", e => { if (!e.target.closest(".card,.tr,.qk,.li,.best,.sim,#menu")) closeMenu(); });
+$("#main").addEventListener("scroll", closeMenu);
+$("#menu").addEventListener("keydown", e => {
+  const bs = [...$("#menu").querySelectorAll("button")], i = bs.indexOf(document.activeElement);
+  if (e.key === "ArrowDown"){ e.preventDefault(); bs[(i+1) % bs.length].focus(); }
+  if (e.key === "ArrowUp"){ e.preventDefault(); bs[(i-1+bs.length) % bs.length].focus(); }
+  if (e.key === "Escape"){ e.stopPropagation(); closeMenu(); }
+});
+$("#plMore").onclick = e => { e.stopPropagation(); const r = $("#plMore").getBoundingClientRect(); openMenu(current, r.left, r.top - 8 - 300, queue); };
+$("#plArt").addEventListener?.("contextmenu", e => { e.preventDefault(); openMenu(current, e.clientX, e.clientY, queue); });
+
+/* ======================= rádios parecidas ======================= */
+const simCache = {};
+let simFor = "";
+async function loadSimilar(s){
+  if (!s || simFor === s.stationuuid) return;
+  simFor = s.stationuuid;
+  const tag = tagsOf(s,1)[0], card = $("#npSimCard");
+  if (!tag){ card.hidden = true; return; }
+  const cc = s.countrycode || (s.country === "Portugal" ? "PT" : /^bra[sz]il$/i.test(s.country||"") ? "BR" : country);
+  const key = tag + "|" + cc;
+  try{
+    const list = simCache[key] || (simCache[key] = await fetchStations({tag, cc, limit:30}));
+    if (simFor !== s.stationuuid) return;
+    const pick = list.filter(x => !same(x,s)).slice(0,5);
+    card.hidden = !pick.length;
+    $("#npSimTitle").textContent = `Mais rádios de “${tag}”`;
+    $("#npSim").innerHTML = pick.map((x,i) => `<button class="sim" data-i="${i}">${art(x,"",40)}<div style="min-width:0"><div class="nm">${esc(x.name)}</div><div class="sb">${esc(place(x) || "Rádio")}</div></div></button>`).join("");
+    hydrate($("#npSim"));
+    $("#npSim").querySelectorAll(".sim").forEach(b => {
+      const x = pick[+b.dataset.i];
+      b.onclick = () => play(x, pick);
+      b.oncontextmenu = e => { e.preventDefault(); openMenu(x, e.clientX, e.clientY, pick); };
+    });
+  }catch(e){ card.hidden = true; }
+}
+
+/* ======================= atalhos ======================= */
+function showHelp(on){ $("#helpModal").hidden = !on; if (on) $("#helpClose").focus(); }
+$("#helpBtn").onclick = () => showHelp(true);
+$("#helpClose").onclick = () => showHelp(false);
+$("#helpModal").onclick = e => { if (e.target.id === "helpModal") showHelp(false); };
+
 /* ======================= controles ======================= */
 let lastVol = audio.volume || .8;
 function volUI(){ $("#vol").value = audio.volume; $("#vol").style.setProperty("--p", audio.volume*100 + "%"); $("#volWave").style.opacity = audio.volume ? 1 : 0; }
@@ -929,12 +1149,24 @@ document.addEventListener("keydown", e => {
   const t = e.target;
   if (e.key === "Escape" && !$("#picker").hidden){ closePicker(); return; }
   if (e.key === "Escape" && !$("#sleep").hidden){ $("#sleep").hidden = true; return; }
+  if (e.key === "Escape" && !$("#helpModal").hidden){ showHelp(false); return; }
+  if (e.key === "Escape" && !$("#menu").hidden){ closeMenu(); return; }
+  if (!$("#helpModal").hidden) return;
   if (t.tagName === "INPUT" && t.type !== "range") return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.code === "Space" && t.tagName !== "BUTTON"){ e.preventDefault(); toggle(); }
   else if (/^[1-8]$/.test(e.key)){ const s = slots[bank*PER + (+e.key-1)]; if (s) play(s, slots.filter(Boolean)); }
   else if (e.key === "ArrowRight" || e.key === "ArrowLeft"){ if (t.type === "range") return; e.preventDefault(); step(e.key === "ArrowRight" ? 1 : -1); }
   else if (e.key === "/"){ e.preventDefault(); $("#q").focus(); }
+  else if (e.key === "?"){ e.preventDefault(); showHelp($("#helpModal").hidden); }
+  else if (/^[abcd]$/i.test(e.key)){ setBank("abcd".indexOf(e.key.toLowerCase())); toast(`Banco ${e.key.toUpperCase()}`); }
+  else if (e.key === "s" || e.key === "S"){ if (current){ e.preventDefault(); openPicker(); } }
+  else if (e.key === "m" || e.key === "M"){ $("#mute").click(); toast(audio.volume ? "Som ligado" : "Sem som"); }
+  else if (e.key === "h" || e.key === "H"){ $("#navHome").click(); }
+  else if ((e.key === "ArrowUp" || e.key === "ArrowDown") && t.type !== "range"){
+    e.preventDefault(); audio.volume = Math.min(1, Math.max(0, audio.volume + (e.key === "ArrowUp" ? .05 : -.05)));
+    if (audio.volume) lastVol = audio.volume; store.set("radio.vol", audio.volume); volUI();
+  }
 });
 
 /* ======================= início ======================= */
