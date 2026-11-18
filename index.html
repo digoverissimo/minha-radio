@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Minha Rádio</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -340,24 +342,140 @@
 
   /* ================= tamanhos ================= */
   @media (max-width:1200px){ .app:not(.np-off){grid-template-columns:240px minmax(0,1fr)} .np{display:none} #npToggle{display:none} }
+  /* ---------- países ---------- */
+  .chip.more-cc{background:transparent; border:1px solid var(--line); color:var(--mut)}
+  .chip.more-cc:hover{color:var(--txt); border-color:var(--mut)}
+  .cc-box{width:min(460px,94vw); max-height:min(640px,86vh); display:flex; flex-direction:column; padding:20px 0 8px}
+  .cc-box h2{padding:0 22px}
+  .cc-search{margin:0 22px 10px; height:42px; border-radius:999px; border:2px solid transparent; background:var(--raise); padding:0 16px; outline:none; font-size:15px}
+  .cc-search:focus{border-color:var(--txt)}
+  .cc-list{overflow-y:auto; padding:0 10px; scrollbar-width:thin; scrollbar-color:var(--raise) transparent}
+  .cc-item{display:flex; align-items:center; gap:12px; width:100%; padding:10px 12px; border-radius:8px; text-align:left; font-size:15px}
+  .cc-item:hover,.cc-item:focus-visible{background:var(--hover); outline:0}
+  .cc-item .fl{font-size:22px; width:28px; text-align:center}
+  .cc-item .n{margin-left:auto; color:var(--dim); font-size:12px}
+  .cc-item[aria-current="true"]{color:var(--acc); font-weight:600}
+
+  /* ---------- só aparecem no telemóvel ---------- */
+  .tabs,.np-ctrl{display:none}
+  .ico-pause{display:none}
+  body.is-on .ico-play{display:none}
+  body.is-on .ico-pause{display:block}
+  .li .more{display:none}
+  .mem-list .li{padding:8px}
+  .mem-list .li .art{width:56px; height:56px; --s:56px}
+  .mem-list .li .more{display:grid; opacity:1}
+  .mem-list .lib-free{margin:12px 0 0}
+  .mem-backup{margin-top:28px; padding:18px; border-radius:10px; background:var(--hover)}
+  .mem-backup h3{margin:0 0 4px; font-size:16px}
+  .mem-backup p{margin:0 0 14px; color:var(--mut); font-size:13px; line-height:1.5}
+  .mem-backup .row{display:flex; gap:10px; flex-wrap:wrap}
+  .card,.tr,.qk,.li,.best,.sim{-webkit-touch-callout:none}
+
   @media (max-width:860px){
-    .app,.app.np-off,.app:not(.np-off){grid-template-columns:72px minmax(0,1fr)}
-    .brand span,.nav span,.lib-head span,.lib .chips,.li .tx{display:none}
-    .side .top{padding:10px 6px} .nav{justify-content:center; padding:10px 0} .lib-head{justify-content:center; padding:14px 0 8px}
-    .li{justify-content:center; padding:6px 0}
-    .bar .chips{display:none}
-    .player{grid-template-columns:minmax(0,1fr) auto} .pl-right{display:none} .live{display:none}
-    .hero .art{width:130px; height:130px}
-  }
-  @media (max-width:560px){
-    .app,.app.np-off,.app:not(.np-off){grid-template-columns:1fr; padding:0; gap:0}
-    .player{padding:0 12px} #shuffle,#spot,#save{display:none} .pl-ctrl{gap:10px}
+    body{overflow:hidden}
+    .app,.app.np-off,.app:not(.np-off){grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) auto auto; padding:0; gap:0; height:100vh; height:100dvh}
     .side{display:none}
     .panel{border-radius:0}
-    .content,.bar{padding-left:14px; padding-right:14px}
-    .thead{display:none} .tr{grid-template-columns:28px minmax(0,1fr)} .tr .loc,.tr .q{display:none}
-    .hero{flex-direction:column; align-items:flex-start}
+    .main{grid-row:1}
+    .main::before{height:260px}
+    .bar{flex-wrap:wrap; gap:10px; padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+    .bar .search{flex:1 1 220px; max-width:none; min-width:0}
+    .search input{height:42px}
+    .bar .chips{display:flex; order:3; flex-basis:100%; margin:0 -14px; padding:0 14px 2px; overflow-x:auto; scrollbar-width:none}
+    .bar .chips::-webkit-scrollbar{display:none}
+    .help{display:none}
+    .back:disabled{display:none}
+    .content{padding:4px 14px 24px}
+    h1.greet{font-size:24px; margin:6px 0 12px}
+    .bank-row{overflow-x:auto; scrollbar-width:none; margin-right:-14px; padding-right:14px}
+    .bank-row .lbl{display:none}
+    .bank-row .chips{flex-wrap:nowrap}
+    .quick{grid-template-columns:1fr 1fr; gap:8px}
+    .qk{height:56px}
+    .qk .art{width:56px; height:56px; --s:56px}
+    .qk .nm{padding:0 8px 0 10px; font-size:13px; line-height:1.2; white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+    .qk .tag,.qk .fab{display:none}
+    .qk.empty{grid-column:1 / -1}
+    .shelf{margin-top:26px}
+    .shelf-head h2{font-size:19px}
+    .shelf-nav{display:none}
+    .cards{grid-auto-columns:138px; margin:0 -14px; padding:0 8px; scroll-snap-type:x mandatory; scroll-padding:0 14px}
+    .card{min-width:138px; padding:6px; scroll-snap-align:start}
+    .card .fab{display:none}
+    .genres{grid-template-columns:1fr 1fr; gap:10px}
+    .genre{height:88px; font-size:17px; padding:12px}
+    .hero{gap:16px; padding:6px 0 16px}
+    .hero > .art{width:112px !important; height:112px !important}
+    .hero > .art .mono{font-size:40px !important}
+    .hero h1{font-size:28px; letter-spacing:-.8px; margin:4px 0 6px}
+    .actions{padding:4px 0 12px}
+    .actions .fab{width:50px; height:50px}
+    .thead{display:none}
+    .tr{grid-template-columns:24px minmax(0,1fr) 34px; gap:10px; padding:6px 4px}
+    .tr .loc{display:none}
+    .tr .q{font-size:0}
+    .tr .n{font-size:13px}
+    .best-wrap{grid-template-columns:1fr; gap:16px}
+    .best{padding:16px}
+    .best .nm{font-size:22px; margin-top:12px}
+    .best .fab{opacity:1; translate:none}
+    .sg{grid-template-columns:44px minmax(0,1fr) auto; padding:6px 4px} .sg .st{display:none} .sg a{opacity:1}
+
+    /* mini leitor por cima das abas */
+    .player{grid-row:2; display:flex; align-items:center; gap:10px; margin:0 8px 4px; padding:7px 8px; border-radius:10px; cursor:pointer;
+      background:hsl(var(--hue) 32% 20%); transition:background 1s}
+    .pl-now{flex:1; gap:10px}
+    .pl-now .art{width:42px; height:42px; --s:42px}
+    .pl-mid{flex-direction:row; gap:0}
+    #shuffle,#prev,#next,#spot,#plMore,.live,.pl-right{display:none !important}
+    .pl-ctrl{gap:4px}
+    .bigplay{width:40px; height:40px; background:transparent; color:var(--txt)}
+    .bigplay svg{width:24px; height:24px}
+    #save{width:40px; height:40px}
+
+    /* abas de baixo */
+    .tabs{grid-row:3; display:grid; grid-template-columns:repeat(4,1fr); padding:4px 4px calc(4px + env(safe-area-inset-bottom)); background:var(--black)}
+    .tab{display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; font-size:11px; font-weight:500; color:var(--mut)}
+    .tab svg{width:24px; height:24px}
+    .tab[aria-current="true"]{color:var(--txt)}
+
+    /* ecrã "a tocar" em tela cheia */
+    .app .np,.app.np-off .np{display:flex !important; position:fixed; inset:0; z-index:50; border-radius:0; visibility:hidden; translate:0 100%;
+      transition:translate .32s cubic-bezier(.2,.8,.2,1), visibility 0s .32s;
+      background:linear-gradient(hsl(var(--hue) 42% 28%), var(--black) 72%); padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom)}
+    .app .np.open{visibility:visible; translate:0 0; transition:translate .32s cubic-bezier(.2,.8,.2,1)}
+    .np-top{padding:12px 16px}
+    .np-body{padding:0 22px 22px}
+    .np-art{width:min(100%, 46vh); margin:4px auto 0; border-radius:10px}
+    .np-name{font-size:24px; margin-top:22px}
+    .np-ctrl{display:block; margin:18px 0 6px}
+    .np-live{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--mut)}
+    .np-live .track{flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,.15); overflow:hidden}
+    .np-live .track i{display:block; height:100%; width:0; background:var(--txt)}
+    body.is-on .np-live .track i{width:100%}
+    .np-live .dot{width:6px; height:6px; border-radius:50%; background:var(--dim)}
+    body.is-on .np-live .dot{background:var(--acc); box-shadow:0 0 8px var(--acc)}
+    .np-btns{display:flex; align-items:center; justify-content:space-between; margin-top:14px}
+    .np-btns .icon-btn{width:46px; height:46px; color:var(--txt)}
+    .np-btns .icon-btn svg{width:26px; height:26px}
+    .np-btns .side-b svg{width:22px; height:22px}
+    .np-btns .side-b{color:var(--mut)}
+    .np-btns .side-b.on{color:var(--acc)}
+    .np-btns .big{width:68px; height:68px; border-radius:50%; background:var(--txt); color:var(--black); display:grid; place-items:center}
+    .np-btns .big svg{width:30px; height:30px}
+    .np-timer{font-size:10px; color:var(--acc); display:block; margin-top:-6px; text-align:center}
+
+    /* janelas que saem de baixo */
+    .picker,.sleep{left:8px; right:8px; width:auto; bottom:calc(8px + env(safe-area-inset-bottom)); z-index:61; border-radius:14px}
+    .menu{left:8px !important; right:8px; top:auto !important; bottom:calc(8px + env(safe-area-inset-bottom)); max-width:none; border-radius:14px; padding:6px}
+    .menu button{padding:13px 12px; font-size:15px}
+    .toast{bottom:calc(150px + env(safe-area-inset-bottom)); width:max-content; max-width:calc(100vw - 32px); text-align:center}
+    .modal{align-items:end}
+    .modal-box{width:100%; border-radius:16px 16px 0 0; padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+    .cc-box{width:100%; max-height:84vh}
   }
+  @media (hover:none){ .tr .more,.best-side .more{opacity:1} .qk:hover{background:rgba(255,255,255,.08)} .card:hover{background:transparent} }
   @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
 </style>
 </head>
@@ -388,11 +506,7 @@
         <input id="q" type="search" placeholder="Que rádio quer ouvir?" autocomplete="off" aria-label="Procurar rádio">
         <button class="clear" id="clear" aria-label="Limpar" hidden>✕</button>
       </label>
-      <div class="chips" id="countryChips">
-        <button class="chip" data-cc="PT">Portugal</button>
-        <button class="chip" data-cc="BR">Brasil</button>
-        <button class="chip" data-cc="">Mundo</button>
-      </div>
+      <div class="chips" id="countryChips" role="group" aria-label="País"></div>
       <button class="help" id="helpBtn" aria-label="Atalhos de teclado" title="Atalhos de teclado (?)">?</button>
     </div>
     <div class="content" id="content"></div>
@@ -405,6 +519,16 @@
       <div class="art np-art" id="npArt"><span class="mono">♪</span></div>
       <div class="np-name" id="npName">Nada a tocar</div>
       <div class="np-sub" id="npSub">Escolha uma rádio para começar.</div>
+      <div class="np-ctrl">
+        <div class="np-live"><span class="dot"></span><span id="npLiveT">Desligado</span><span class="track"><i></i></span></div>
+        <div class="np-btns">
+          <button class="icon-btn side-b" id="mSave" aria-label="Guardar nas memórias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button>
+          <button class="icon-btn" id="mPrev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+          <button class="big" id="mPlay" aria-label="Ligar ou desligar"><svg class="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><svg class="ico-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+          <button class="icon-btn" id="mNext" aria-label="Seguinte"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+          <button class="icon-btn side-b" id="mTimer" aria-label="Timer para dormir"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span class="np-timer" id="mTimerT"></span></span></button>
+        </div>
+      </div>
       <div class="np-card">
         <h4>Música no ar</h4>
         <div class="song none" id="npSong">Esta rádio não informa a música.</div>
@@ -435,8 +559,8 @@
         <button class="icon-btn" id="shuffle" aria-label="Rádio ao acaso" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></button>
         <button class="icon-btn" id="prev" aria-label="Anterior" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
         <button class="bigplay" id="play" aria-label="Ligar" disabled>
-          <svg id="icoPlay" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <svg id="icoPause" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          <svg id="icoPlay" class="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="icoPause" class="ico-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
         </button>
         <button class="icon-btn" id="next" aria-label="Seguinte" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
         <a class="icon-btn" id="spot" aria-label="Procurar a música no Spotify" target="_blank" rel="noopener" style="visibility:hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></a>
@@ -453,9 +577,24 @@
       </div>
     </div>
   </footer>
+
+  <!-- ============ abas (telemóvel) ============ -->
+  <nav class="tabs" id="tabs" aria-label="Navegação">
+    <button class="tab" data-t="home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 3 10v11h6v-6h6v6h6V10z"/></svg>Início</button>
+    <button class="tab" data-t="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>Procurar</button>
+    <button class="tab" data-t="memories"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h2v18H4zM9 3h2v18H9zM14.2 3.6l1.9-.6 5.4 17.4-1.9.6z"/></svg>Memórias</button>
+    <button class="tab" data-t="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Músicas</button>
+  </nav>
 </div>
 
 <div class="menu" id="menu" role="menu" hidden></div>
+<div class="modal" id="ccModal" hidden>
+  <div class="modal-box cc-box" role="dialog" aria-labelledby="ccTitle">
+    <h2 id="ccTitle">Escolher país<button id="ccClose" aria-label="Fechar" style="margin-left:auto; color:var(--mut)">✕</button></h2>
+    <input class="cc-search" id="ccSearch" type="search" placeholder="Procurar país" autocomplete="off" aria-label="Procurar país">
+    <div class="cc-list" id="ccList"></div>
+  </div>
+</div>
 <div class="modal" id="confirmModal" hidden>
   <div class="modal-box confirm" role="alertdialog" aria-labelledby="cfTitle">
     <h2 id="cfTitle">Importar cópia de segurança</h2>
@@ -502,7 +641,10 @@ const SVC = "https://minha-radio-musica.rverissimodantas.workers.dev/";   // ser
 const NOWPLAYING = SVC;
 const GENRES = [["Notícias","news",210],["Pop","pop",330],["Rock","rock",0],["Fado","fado",28],["MPB","mpb",150],["Samba","samba",45],
   ["Sertanejo","sertanejo",80],["Jazz","jazz",265],["Clássica","classical",190],["Eletrônica","electronic",290],["Anos 80","80s",310],["Conversa","talk",170]];
-const CN = {PT:"Portugal", BR:"Brasil", "":"todo o mundo"};
+let regionNames = null;
+try{ regionNames = new Intl.DisplayNames(["pt-PT"], {type:"region"}); }catch(e){}
+const cname = cc => !cc ? "todo o mundo" : cc === "BR" ? "Brasil" : (regionNames && regionNames.of(cc)) || cc;
+const flag = cc => cc && cc.length === 2 ? String.fromCodePoint(...[...cc.toUpperCase()].map(c => 127397 + c.charCodeAt(0))) : "🌍";
 const BANKS = ["A","B","C","D"], PER = 8;
 const $ = s => document.querySelector(s);
 const audio = $("#audio");
@@ -658,6 +800,7 @@ function go(v, push = true){
   $("#navHome").setAttribute("aria-current", v.name === "home");
   $("#navSearch").setAttribute("aria-current", v.name === "search");
   $("#navSongs").setAttribute("aria-current", v.name === "songs");
+  closeSheet();
   $("#main").scrollTo({top:0});
   render();
 }
@@ -673,8 +816,55 @@ function render(){
   else if (view.name === "list") renderList(c);
   else if (view.name === "search") renderSearch(c);
   else if (view.name === "songs") renderSongs(c);
-  document.querySelectorAll("#countryChips .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.cc === country));
+  else if (view.name === "memories") renderMemories(c);
+  renderCountryChips();
+  $("#countryChips").hidden = view.name === "memories" || view.name === "songs";
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.t === view.name));
 }
+function renderCountryChips(){
+  const base = ["PT", "BR"];
+  const extra = country && !base.includes(country) ? [country] : [];
+  const box = $("#countryChips");
+  box.innerHTML = [...base, ...extra].map(cc => `<button class="chip" data-cc="${cc}" aria-pressed="${cc === country}">${flag(cc)} ${esc(cname(cc))}</button>`).join("")
+    + `<button class="chip" data-cc="" aria-pressed="${country === ""}">🌍 Mundo</button>`
+    + `<button class="chip more-cc" id="ccMore">Outros países…</button>`;
+  box.querySelectorAll("[data-cc]").forEach(b => b.onclick = () => setCountry(b.dataset.cc));
+  $("#ccMore").onclick = openCountries;
+}
+function setCountry(cc){
+  country = cc; store.set("radio.country", country);
+  if (view.name === "list" && view.kind === "recent") go({name:"home"}, false); else render();
+}
+let countriesCache = null;
+async function openCountries(){
+  $("#ccModal").hidden = false; $("#ccSearch").value = "";
+  if (!matchMedia("(hover:none)").matches) $("#ccSearch").focus();
+  const list = $("#ccList");
+  if (!countriesCache){
+    list.innerHTML = `<div class="note" style="padding:30px 0">A carregar países…</div>`;
+    try{
+      const data = await api("countries?order=stationcount&reverse=true&hidebroken=true");
+      const seen = new Set();
+      countriesCache = data.filter(c => c.iso_3166_1 && c.iso_3166_1.length === 2 && c.stationcount >= 5 && !seen.has(c.iso_3166_1.toUpperCase()) && seen.add(c.iso_3166_1.toUpperCase()))
+        .map(c => ({cc:c.iso_3166_1.toUpperCase(), name:cname(c.iso_3166_1.toUpperCase()), n:c.stationcount}))
+        .sort((a,b) => a.name.localeCompare(b.name, "pt"));
+    }catch(e){ list.innerHTML = `<div class="note" style="padding:30px 0"><b>Sem ligação</b>Tente de novo daqui a pouco.</div>`; return; }
+  }
+  drawCountries();
+}
+const fold = t => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+function drawCountries(){
+  const q = fold($("#ccSearch").value.trim());
+  const items = (countriesCache || []).filter(c => !q || fold(c.name).includes(q) || c.cc.toLowerCase() === q);
+  $("#ccList").innerHTML = items.length ? items.map(c => `<button class="cc-item" data-cc="${c.cc}" aria-current="${c.cc === country}"><span class="fl">${flag(c.cc)}</span>${esc(c.name)}<span class="n">${c.n} rádios</span></button>`).join("")
+    : `<div class="note" style="padding:30px 0">Nenhum país com esse nome.</div>`;
+  $("#ccList").querySelectorAll(".cc-item").forEach(b => b.onclick = () => { closeCountries(); setCountry(b.dataset.cc); toast(`${flag(b.dataset.cc)} ${cname(b.dataset.cc)}`); });
+}
+function closeCountries(){ $("#ccModal").hidden = true; }
+$("#ccSearch").addEventListener("input", drawCountries);
+$("#ccSearch").addEventListener("keydown", e => { if (e.key === "Enter"){ const f = $("#ccList .cc-item"); f && f.click(); } });
+$("#ccClose").onclick = closeCountries;
+$("#ccModal").onclick = e => { if (e.target.id === "ccModal") closeCountries(); };
 
 /* ---------- início ---------- */
 function greeting(){ const h = new Date().getHours(); return h < 6 ? "Boa noite" : h < 12 ? "Bom dia" : h < 20 ? "Boa tarde" : "Boa noite"; }
@@ -685,7 +875,7 @@ async function renderHome(c){
     <div class="bank-row"><span class="lbl">Memórias</span><div class="chips" style="padding:0" id="homeBanks"></div></div>
     <div class="quick" id="quick"></div>
     ${recent.length ? `<section class="shelf"><div class="shelf-head"><h2>Ouvidas recentemente</h2><button data-open="recent">Mostrar tudo</button>${navBtns("shRecent")}</div><div class="cards" id="shRecent"></div></section>` : ""}
-    <section class="shelf"><div class="shelf-head"><h2>Mais ouvidas em ${CN[country]}</h2><button data-open="top">Mostrar tudo</button>${navBtns("shTop")}</div><div class="cards" id="shTop">${skCards()}</div></section>
+    <section class="shelf"><div class="shelf-head"><h2>Mais ouvidas em ${cname(country)}</h2><button data-open="top">Mostrar tudo</button>${navBtns("shTop")}</div><div class="cards" id="shTop">${skCards()}</div></section>
     <section class="shelf"><div class="shelf-head"><h2>Navegar por gênero</h2></div><div class="genres" id="genres"></div></section>`;
   renderQuick();
   if (recent.length) fillCards($("#shRecent"), recent.slice(0,12), recent);
@@ -737,7 +927,7 @@ function renderQuick(){
     if (!s){
       if (list.findIndex(x => !x) !== k) return "";        // só mostra a primeira posição livre
       const free = list.filter(x => !x).length;
-      return `<div class="qk empty" data-slot="${i}"><div class="art" style="--s:64px"><span class="mono" style="font-size:22px">+</span></div><span class="nm">${free} ${free === 1 ? "posição livre" : "posições livres"} · tecla S guarda a rádio a tocar</span></div>`;
+      return `<div class="qk empty" data-slot="${i}"><div class="art" style="--s:64px"><span class="mono" style="font-size:22px">+</span></div><span class="nm">${free} ${free === 1 ? "posição livre" : "posições livres"} · ${matchMedia("(hover:none)").matches ? "carregue sem soltar numa rádio para guardar" : "tecla S guarda a rádio a tocar"}</span></div>`;
     }
     return `<button class="qk" data-slot="${i}" aria-current="${same(s,current)}" draggable="true">${art(s,"",64)}<span class="nm">${esc(s.name)}</span><span class="tag">${slotLabel(i)}</span><span class="fab">${isLive(s) ? PAUSE : PLAY}</span></button>`;
   }).join("");
@@ -749,7 +939,7 @@ function renderQuick(){
 async function renderList(c){
   const v = view;
   const g = v.kind === "tag" ? GENRES.find(x => x[1] === v.tag) : null;
-  const title = v.kind === "recent" ? "Ouvidas recentemente" : v.kind === "top" ? `Mais ouvidas em ${CN[country]}` : v.kind === "query" ? `“${v.q}”` : g ? g[0] : v.tag;
+  const title = v.kind === "recent" ? "Ouvidas recentemente" : v.kind === "top" ? `Mais ouvidas em ${cname(country)}` : v.kind === "query" ? `“${v.q}”` : g ? g[0] : v.tag;
   const kind = v.kind === "tag" ? "Gênero" : v.kind === "query" ? "Resultados da busca" : v.kind === "recent" ? "Histórico" : "Seleção";
   const hue = g ? g[2] : v.kind === "recent" ? 260 : v.kind === "query" ? 200 : 172;
   setHeaderHue(hue);
@@ -774,7 +964,7 @@ async function renderList(c){
   v.list = list || [];
   const meta = $("#lsMeta");
   if (!list){ meta.textContent = ""; $("#rows").innerHTML = `<div class="note"><b>Sem ligação ao catálogo de rádios</b>Confira a internet e tente de novo.</div>`; return; }
-  meta.textContent = `${list.length} ${list.length === 1 ? "estação" : "estações"}${v.kind === "recent" ? "" : " · " + CN[country]}`;
+  meta.textContent = `${list.length} ${list.length === 1 ? "estação" : "estações"}${v.kind === "recent" ? "" : " · " + cname(country)}`;
   if (!list.length){
     $("#rows").innerHTML = v.kind === "query"
       ? `<div class="note"><b>Nenhuma rádio chamada “${esc(v.q)}”</b>${country ? "Tente outro nome ou escolha Mundo em cima." : "Tente outro nome."}</div>`
@@ -847,24 +1037,40 @@ $("#q").addEventListener("keydown", e => {
 });
 $("#q").addEventListener("focus", () => { if (view.name === "home") go({name:"search"}); });
 $("#clear").onclick = () => { $("#q").value = ""; $("#clear").hidden = true; $("#q").focus(); go({name:"search"}, false); };
-document.querySelectorAll("#countryChips .chip").forEach(b => b.onclick = () => { country = b.dataset.cc; store.set("radio.country", country); render(); });
+
 
 /* ======================= biblioteca (lateral) ======================= */
 function setBank(b){ bank = b; store.set("radio.bank", b); renderLib(); renderQuick(); renderPicker(); }
+function renderMemories(c){
+  setHeaderHue(current ? hueOf(current.name) : 200);
+  c.innerHTML = `<h1 class="greet">As minhas memórias</h1>
+    <div class="chips" id="memBanks" style="padding:0 0 14px; flex-wrap:nowrap; overflow-x:auto"></div>
+    <div class="mem-list" id="memList"></div>
+    <div class="mem-backup"><h3>Cópia de segurança</h3>
+      <p>As memórias ficam guardadas só neste aparelho. Exporte um arquivo para não as perder, ou importe o arquivo que exportou noutro aparelho.</p>
+      <div class="row"><button class="btn" id="mExport">Exportar</button><button class="btn" id="mImport">Importar…</button></div></div>`;
+  $("#mExport").onclick = exportBackup;
+  $("#mImport").onclick = () => $("#importFile").click();
+  renderLib();
+}
 function renderLib(){
-  $("#libBanks").innerHTML = BANKS.map((L,bi) => `<button class="chip" data-b="${bi}" aria-pressed="${bi === bank}" aria-label="Banco ${L}" style="min-width:44px">${L}${slots.slice(bi*PER, bi*PER+PER).some(Boolean) ? `<span class="cnt">${slots.slice(bi*PER, bi*PER+PER).filter(Boolean).length}</span>` : ""}</button>`).join("");
-  $("#libBanks").querySelectorAll("button").forEach(b => {
+  libInto($("#libBanks"), $("#libList"), true);
+  if (view.name === "memories" && $("#memList")) libInto($("#memBanks"), $("#memList"), false);
+}
+function libInto(banksEl, listEl, compact){
+  banksEl.innerHTML = BANKS.map((L,bi) => `<button class="chip" data-b="${bi}" aria-pressed="${bi === bank}" aria-label="Banco ${L}" style="min-width:44px">${compact ? "" : "Banco "}${L}${slots.slice(bi*PER, bi*PER+PER).some(Boolean) ? `<span class="cnt">${slots.slice(bi*PER, bi*PER+PER).filter(Boolean).length}</span>` : ""}</button>`).join("");
+  banksEl.querySelectorAll("button").forEach(b => {
     b.onclick = () => setBank(+b.dataset.b);
     b.ondragover = e => { if (dragFrom >= 0 && +b.dataset.b !== bank){ e.preventDefault(); setBank(+b.dataset.b); } };
   });
-  const box = $("#libList");
+  const box = listEl;
   const inBank = slots.slice(bank*PER, bank*PER+PER);
   const free = inBank.filter(x => !x).length;
   box.innerHTML = inBank.map((s,k) => {
     const i = bank*PER + k;
     if (!s) return "";
-    return `<button class="li" data-slot="${i}" aria-current="${same(s,current)}" draggable="true">${art(s,"",48)}<div class="tx"><div class="nm">${esc(s.name)}</div><div class="sb">Memória ${slotLabel(i)} · ${esc(s.country || "Rádio")}</div></div>${isLive(s) ? `<span class="vol-ic">${EQ}</span>` : ""}</button>`;
-  }).join("") + (free ? `<div class="lib-free">${free === PER ? `<b>Banco ${BANKS[bank]} vazio.</b> ` : `<b>${free} ${free === 1 ? "posição livre" : "posições livres"}</b> no banco ${BANKS[bank]}. `}Para guardar, toque numa rádio e use o <b>⊕</b> no leitor, ou a tecla <kbd>S</kbd>.</div>` : "");
+    return `<button class="li" data-slot="${i}" aria-current="${same(s,current)}" draggable="true">${art(s,"",48)}<div class="tx"><div class="nm">${esc(s.name)}</div><div class="sb">Memória ${slotLabel(i)} · ${esc(s.country || "Rádio")}</div></div>${isLive(s) ? `<span class="vol-ic">${EQ}</span>` : ""}<span class="more" role="button" tabindex="0" aria-label="Mais opções">${DOTS}</span></button>`;
+  }).join("") + (free ? `<div class="lib-free">${free === PER ? `<b>Banco ${BANKS[bank]} vazio.</b> ` : `<b>${free} ${free === 1 ? "posição livre" : "posições livres"}</b> no banco ${BANKS[bank]}. `}${compact ? `Para guardar, toque numa rádio e use o <b>⊕</b> no leitor, ou a tecla <kbd>S</kbd>.` : `Para guardar, carregue sem soltar numa rádio e escolha <b>Guardar nas memórias</b>, ou use o <b>⊕</b> no leitor.`}</div>` : "");
   hydrate(box);
   box.querySelectorAll("[data-slot]").forEach(el => wireSlot(el, +el.dataset.slot));
 }
@@ -872,7 +1078,11 @@ let dragFrom = -1;
 function wireSlot(el, i){
   const s = slots[i];
   if (s){
-    el.onclick = () => isLive(s) ? stop() : play(s, slots.filter(Boolean));
+    el.onclick = e => {
+      const m = e.target.closest(".more");
+      if (m){ e.stopPropagation(); const r = m.getBoundingClientRect(); openMenu(s, r.right, r.bottom + 4, slots.filter(Boolean)); return; }
+      isLive(s) ? stop() : play(s, slots.filter(Boolean));
+    };
     el.ondragstart = e => { dragFrom = i; el.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; };
     el.ondragend = () => { el.classList.remove("dragging"); dragFrom = -1; };
     el.oncontextmenu = e => { e.preventDefault(); openMenu(s, e.clientX, e.clientY, slots.filter(Boolean)); };
@@ -920,6 +1130,7 @@ function syncSave(){
     ? `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="m7.5 12 3 3 6-6" fill="none" stroke="#08090B" stroke-width="2.4"/></svg>`
     : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>`;
   $("#save").setAttribute("aria-label", at >= 0 ? `Na memória ${slotLabel(at)}` : "Guardar nas memórias");
+  $("#mSave").innerHTML = $("#save").innerHTML; $("#mSave").classList.toggle("on", at >= 0);
   $("#save").title = at >= 0 ? `Na memória ${slotLabel(at)}` : "Guardar nas memórias";
 }
 
@@ -959,10 +1170,11 @@ let state = "off";
 function setState(k, msg){
   state = k;
   const on = k === "on" || k === "busy";
-  $("#icoPlay").toggleAttribute("hidden", on); $("#icoPause").toggleAttribute("hidden", !on);
+  document.body.classList.toggle("is-on", on);
   $("#play").setAttribute("aria-label", on ? "Desligar" : "Ligar");
   $("#live").className = "live" + (k === "on" ? " on" : k === "busy" ? " busy" : "");
   $("#liveTxt").textContent = msg || (k === "on" ? "Ao vivo" : k === "busy" ? "A sintonizar…" : "Desligado");
+  $("#npLiveT").textContent = $("#liveTxt").textContent;
   document.title = k === "on" && current ? "▶ " + current.name : "Minha Rádio";
   refreshNow(); refreshMarks();
 }
@@ -1164,7 +1376,7 @@ function setSleep(min){
   if (sleepVol !== null){ audio.volume = sleepVol; sleepVol = null; volUI(); }
   sleepEnd = min ? Date.now() + min*60000 : 0;
   $("#sleepBtn").classList.toggle("on", !!sleepEnd);
-  if (!sleepEnd){ $("#sleepLeft").hidden = true; toast("Timer desligado"); return; }
+  if (!sleepEnd){ $("#sleepLeft").hidden = true; $("#mTimerT").textContent = ""; $("#mTimer").classList.remove("on"); toast("Timer desligado"); return; }
   toast(`A rádio desliga daqui a ${min} minutos`);
   if (!powered && current) play(current);
   tickSleep(); sleepTick = setInterval(tickSleep, 1000);
@@ -1174,13 +1386,14 @@ function tickSleep(){
   if (left <= 0){
     clearInterval(sleepTick); sleepEnd = 0; stop();
     if (sleepVol !== null){ audio.volume = sleepVol; sleepVol = null; volUI(); }
-    $("#sleepBtn").classList.remove("on"); $("#sleepLeft").hidden = true; return;
+    $("#sleepBtn").classList.remove("on"); $("#sleepLeft").hidden = true; $("#mTimerT").textContent = ""; $("#mTimer").classList.remove("on"); return;
   }
   // no último minuto o volume vai baixando devagar
   if (left < 60000 && powered){ if (sleepVol === null) sleepVol = audio.volume; audio.volume = sleepVol * (left / 60000); }
   const m = Math.ceil(left / 60000);
   $("#sleepLeft").hidden = false;
   $("#sleepLeft").textContent = left < 60000 ? `${Math.ceil(left/1000)} s` : `${m} min`;
+  $("#mTimerT").textContent = $("#sleepLeft").textContent; $("#mTimer").classList.add("on");
 }
 $("#sleepBtn").onclick = e => { e.stopPropagation(); renderSleep(); $("#sleep").hidden = !$("#sleep").hidden; };
 document.addEventListener("click", e => { if (!$("#sleep").hidden && !e.target.closest("#sleep")) $("#sleep").hidden = true; });
@@ -1320,6 +1533,55 @@ async function loadSimilar(s){
   }catch(e){ card.hidden = true; }
 }
 
+/* ======================= telemóvel ======================= */
+const isMobile = () => matchMedia("(max-width:860px)").matches;
+function openSheet(){ if (!current) return; $("#np").classList.add("open"); }
+function closeSheet(){ $("#np").classList.remove("open"); }
+$(".player").addEventListener("click", e => { if (isMobile() && !e.target.closest("button,a")) openSheet(); });
+$("#tabs").addEventListener("click", e => {
+  const t = e.target.closest(".tab"); if (!t) return;
+  const v = t.dataset.t;
+  history_ = [];
+  if (v === "home"){ $("#q").value = ""; $("#clear").hidden = true; go({name:"home"}, false); }
+  else if (v === "search"){ go({name:"search"}, false); $("#q").focus(); }
+  else go({name:v}, false);
+  $("#back").disabled = true;
+});
+$("#mPlay").onclick = toggle;
+$("#mPrev").onclick = () => step(-1);
+$("#mNext").onclick = () => step(1);
+$("#mSave").onclick = e => { e.stopPropagation(); openPicker(); };
+$("#mTimer").onclick = e => { e.stopPropagation(); renderSleep(); $("#sleep").hidden = !$("#sleep").hidden; };
+// arrastar para baixo fecha o ecrã "a tocar"
+(() => {
+  let y0 = null, moved = 0;
+  const np = $("#np");
+  np.addEventListener("touchstart", e => { if (np.scrollTop <= 0 && isMobile()){ y0 = e.touches[0].clientY; moved = 0; } }, {passive:true});
+  np.addEventListener("touchmove", e => {
+    if (y0 === null) return; moved = e.touches[0].clientY - y0;
+    if (moved > 0){ np.style.transition = "none"; np.style.translate = `0 ${moved}px`; }
+  }, {passive:true});
+  np.addEventListener("touchend", () => {
+    if (y0 === null) return; np.style.transition = ""; np.style.translate = "";
+    if (moved > 110) closeSheet(); y0 = null;
+  });
+})();
+// carregar sem soltar abre o menu de opções (no telemóvel não há botão direito)
+(() => {
+  let t = null, fired = false, sx = 0, sy = 0;
+  const SEL = ".card,.tr,.qk,.li,.best,.sim";
+  document.addEventListener("pointerdown", e => {
+    if (e.pointerType !== "touch") return;
+    const el = e.target.closest(SEL); if (!el || !el.oncontextmenu) return;
+    sx = e.clientX; sy = e.clientY;
+    t = setTimeout(() => { t = null; fired = true; navigator.vibrate && navigator.vibrate(12); el.oncontextmenu({preventDefault(){}, clientX:sx, clientY:sy}); }, 480);
+  }, {passive:true});
+  document.addEventListener("pointermove", e => { if (t && Math.hypot(e.clientX - sx, e.clientY - sy) > 10){ clearTimeout(t); t = null; } }, {passive:true});
+  ["pointerup","pointercancel"].forEach(ev => document.addEventListener(ev, () => { clearTimeout(t); t = null; }, {passive:true}));
+  document.addEventListener("click", e => { if (fired){ fired = false; e.stopPropagation(); e.preventDefault(); } }, true);
+  document.addEventListener("contextmenu", e => { if (e.target.closest(SEL) && matchMedia("(hover:none)").matches) e.preventDefault(); });
+})();
+
 /* ======================= atalhos ======================= */
 function showHelp(on){ $("#helpModal").hidden = !on; if (on) $("#helpClose").focus(); }
 $("#helpBtn").onclick = () => showHelp(true);
@@ -1337,13 +1599,16 @@ $("#next").onclick = () => step(1);
 $("#shuffle").onclick = () => { const q = queue.length ? queue : (topCache[country] || []); if (q.length > 1){ let s; do s = q[Math.floor(Math.random()*q.length)]; while (same(s,current)); play(s, q); } };
 function setNp(off){ $("#app").classList.toggle("np-off", off); $("#npToggle").classList.toggle("on", !off); store.set("radio.npOff", off); }
 $("#npToggle").onclick = () => setNp(!$("#app").classList.contains("np-off"));
-$("#npClose").onclick = () => setNp(true);
+$("#npClose").onclick = () => isMobile() ? closeSheet() : setNp(true);
 $("#npToggle").classList.toggle("on", !npOff);
 
 document.addEventListener("keydown", e => {
   const t = e.target;
   if (e.key === "Escape" && !$("#picker").hidden){ closePicker(); return; }
   if (e.key === "Escape" && !$("#sleep").hidden){ $("#sleep").hidden = true; return; }
+  if (e.key === "Escape" && !$("#ccModal").hidden){ closeCountries(); return; }
+  if (!$("#ccModal").hidden) return;
+  if (e.key === "Escape" && $("#np").classList.contains("open")){ closeSheet(); return; }
   if (e.key === "Escape" && !$("#helpModal").hidden){ showHelp(false); return; }
   if (e.key === "Escape" && !$("#confirmModal").hidden){ $("#cfNo").click(); return; }
   if (!$("#confirmModal").hidden) return;
