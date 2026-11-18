@@ -342,6 +342,21 @@
 
   /* ================= tamanhos ================= */
   @media (max-width:1200px){ .app:not(.np-off){grid-template-columns:240px minmax(0,1fr)} .np{display:none} #npToggle{display:none} }
+  /* ---------- letra ---------- */
+  .lyr{white-space:pre-line; font-weight:700; font-size:17px; line-height:1.55; color:var(--txt)}
+  .lyr.clip{max-height:240px; overflow:hidden; -webkit-mask-image:linear-gradient(#000 60%, transparent); mask-image:linear-gradient(#000 60%, transparent)}
+  .lyr-note{color:var(--mut); font-size:13px}
+  .lyr-more{margin-top:12px; padding:7px 14px; border-radius:999px; background:var(--txt); color:var(--black); font-weight:600; font-size:13px}
+  .lyr-src{margin-top:10px; font-size:11px; color:var(--dim)}
+  .lyrics-view{margin:-4px -24px -40px; padding:28px 32px 60px; min-height:calc(100% + 44px); background:linear-gradient(hsl(var(--hue) 45% 30%), hsl(var(--hue) 40% 18%))}
+  .lyrics-view .who{display:flex; align-items:center; gap:16px; margin-bottom:28px}
+  .lyrics-view .who img{width:72px; height:72px; border-radius:6px; object-fit:cover; box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .lyrics-view h1{margin:0; font-size:28px; letter-spacing:-.5px}
+  .lyrics-view .sub{color:rgba(255,255,255,.7)}
+  .lyrics-view .lyr{font-size:clamp(22px,2.6vw,32px); line-height:1.5; letter-spacing:-.3px; max-width:900px}
+  .lyr .gap{display:block; height:.6em}
+  #lyricsBtn.on{color:var(--acc)}
+
   /* ---------- países ---------- */
   .chip.more-cc{background:transparent; border:1px solid var(--line); color:var(--mut)}
   .chip.more-cc:hover{color:var(--txt); border-color:var(--mut)}
@@ -428,7 +443,9 @@
     .pl-now{flex:1; gap:10px}
     .pl-now .art{width:42px; height:42px; --s:42px}
     .pl-mid{flex-direction:row; gap:0}
-    #shuffle,#prev,#next,#spot,#plMore,.live,.pl-right{display:none !important}
+    #shuffle,#prev,#next,#spot,#lyricsBtn,#plMore,.live,.pl-right{display:none !important}
+    .lyrics-view{margin:-4px -14px -24px; padding:20px 18px 40px}
+    .lyrics-view .lyr{font-size:22px}
     .pl-ctrl{gap:4px}
     .bigplay{width:40px; height:40px; background:transparent; color:var(--txt)}
     .bigplay svg{width:24px; height:24px}
@@ -534,6 +551,10 @@
         <div class="song none" id="npSong">Esta rádio não informa a música.</div>
         <a id="npSpot" target="_blank" rel="noopener" hidden>Abrir no Spotify</a>
       </div>
+      <div class="np-card" id="npLyrCard" hidden>
+        <h4>Letra</h4>
+        <div id="npLyr"></div>
+      </div>
       <div class="np-card" id="npSimCard" hidden>
         <h4 id="npSimTitle">Rádios parecidas</h4>
         <div id="npSim"></div>
@@ -563,6 +584,7 @@
           <svg id="icoPause" class="ico-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
         </button>
         <button class="icon-btn" id="next" aria-label="Seguinte" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+        <button class="icon-btn" id="lyricsBtn" aria-label="Letra" title="Letra" style="visibility:hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></button>
         <a class="icon-btn" id="spot" aria-label="Procurar a música no Spotify" target="_blank" rel="noopener" style="visibility:hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></a>
       </div>
       <div class="live" id="live"><span class="dot"></span><span id="liveTxt">Desligado</span><span class="track"><i></i></span><span id="liveQ"></span></div>
@@ -817,6 +839,7 @@ function render(){
   else if (view.name === "search") renderSearch(c);
   else if (view.name === "songs") renderSongs(c);
   else if (view.name === "memories") renderMemories(c);
+  else if (view.name === "lyrics") renderLyricsView(c);
   renderCountryChips();
   $("#countryChips").hidden = view.name === "memories" || view.name === "songs";
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.t === view.name));
@@ -1233,6 +1256,7 @@ function refreshNow(){
   const spot = lastSong ? "https://open.spotify.com/search/" + encodeURIComponent(lastSong.replace(/\s-\s/," ")) : "";
   $("#npSpot").hidden = !spot; $("#npSpot").href = spot || "#";
   $("#spot").style.visibility = spot ? "visible" : "hidden"; $("#spot").href = spot || "#";
+  showLyrics();
   const at = slotOf(s);
   $("#npAbout").textContent = [s.bitrate ? s.bitrate + " kbps" : "", s.codec, at >= 0 ? "na memória " + slotLabel(at) : ""].filter(Boolean).join(" · ") || "Rádio ao vivo";
   $("#npTags").innerHTML = tagsOf(s, 6).map(t => `<button data-tag="${esc(t)}">${esc(t)}</button>`).join("");
@@ -1261,7 +1285,7 @@ async function pollSong(first){
   try{
     const r = await fetch(NOWPLAYING + "?url=" + encodeURIComponent(s.url_resolved));
     const { title } = await r.json();
-    if (same(s,current)){ const t = clean(title, s.name); if (t !== lastSong){ lastSong = t; cover = null; logSong(t, s); refreshNow(); loadCover(t, s); } }
+    if (same(s,current)){ const t = clean(title, s.name); if (t !== lastSong){ lastSong = t; cover = null; logSong(t, s); refreshNow(); loadCover(t, s); loadLyrics(t); } }
   }catch(e){}
   songT = setTimeout(() => pollSong(false), first ? 12000 : 20000);
 }
@@ -1282,6 +1306,91 @@ function mediaMeta(){
     navigator.mediaSession.setActionHandler("previoustrack", () => step(-1));
   }catch(e){}
 }
+
+/* ---------- letra da música (LRCLIB, base de letras gratuita) ---------- */
+const lyrCache = {};          // música → {status:"ok"|"none"|"loading", text, artist, title}
+const fold2 = t => (t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+function splitSong(t){
+  let s = t.replace(/\s*[|•].*$/, "");                       // tira "| Nome da rádio"
+  const parts = s.split(/\s+[-–—]\s+/);
+  let artist = "", title = s;
+  if (parts.length >= 2){ artist = parts[0]; title = parts.slice(1).join(" - "); }
+  const tidy = x => x.replace(/\(.*?\)|\[.*?\]/g, "").replace(/\b(feat\.?|ft\.?|part\.?|com)\s.*$/i, "").replace(/\b(ao vivo|live|ac[uú]stico|remaster(ed)?( \d{4})?|radio edit|vers[aã]o r[aá]dio)\b/ig, "").replace(/\s+/g, " ").trim();
+  return {artist: tidy(artist), title: tidy(title)};
+}
+const stripLrc = t => (t || "").replace(/^\[[^\]]*\]\s?/gm, "").trim();
+async function lrcSearch(params){
+  const r = await fetch("https://lrclib.net/api/search?" + new URLSearchParams(params));
+  if (!r.ok) return [];
+  return await r.json();
+}
+function pickLyrics(list, artist){
+  const fa = fold2(artist);
+  const withText = (list || []).filter(x => !x.instrumental && (x.plainLyrics || x.syncedLyrics));
+  const good = fa ? withText.find(x => { const a = fold2(x.artistName); return a.includes(fa) || fa.includes(a); }) : null;
+  return good || (fa ? null : withText[0]) || null;
+}
+async function loadLyrics(t){
+  if (!t || lyrCache[t]) { showLyrics(); return; }
+  lyrCache[t] = {status:"loading"}; showLyrics();
+  const {artist, title} = splitSong(t);
+  let hit = null;
+  try{
+    if (artist && title){
+      hit = pickLyrics(await lrcSearch({track_name:title, artist_name:artist}), artist)
+         || pickLyrics(await lrcSearch({track_name:artist, artist_name:title}), title);   // algumas rádios mandam "Música - Artista"
+    }
+    if (!hit){
+      const list = await lrcSearch({q: (artist + " " + title).trim()});
+      hit = pickLyrics(list, artist) || pickLyrics(list, title);
+    }
+  }catch(e){}
+  lyrCache[t] = hit
+    ? {status:"ok", text: hit.plainLyrics ? hit.plainLyrics.trim() : stripLrc(hit.syncedLyrics), artist: hit.artistName, title: hit.trackName}
+    : {status:"none"};
+  showLyrics();
+}
+function lyricsHTML(text){
+  return esc(text).split(/\n\s*\n/).map(block => block.replace(/\n/g, "<br>")).join('<span class="gap"></span>');
+}
+function showLyrics(){
+  const card = $("#npLyrCard"), box = $("#npLyr"), btn = $("#lyricsBtn");
+  const L = lastSong && lyrCache[lastSong];
+  btn.style.visibility = lastSong ? "visible" : "hidden";
+  btn.classList.toggle("on", view.name === "lyrics");
+  if (!lastSong){ card.hidden = true; if (view.name === "lyrics" && lyrViewKey !== "|undefined") render(); return; }
+  card.hidden = false;
+  if (!L || L.status === "loading") box.innerHTML = `<div class="lyr-note">A procurar a letra…</div>`;
+  else if (L.status === "none") box.innerHTML = `<div class="lyr-note">Letra não encontrada para esta música.</div>`;
+  else {
+    box.innerHTML = `<div class="lyr clip" id="npLyrText">${lyricsHTML(L.text)}</div><button class="lyr-more" id="npLyrMore">${isMobile() ? "Mostrar a letra toda" : "Abrir a letra"}</button>`;
+    $("#npLyrMore").onclick = () => {
+      if (isMobile()){ $("#npLyrText").classList.remove("clip"); $("#npLyrMore").remove(); }
+      else go({name:"lyrics"});
+    };
+  }
+  if (view.name === "lyrics" && lyrViewKey !== lastSong + "|" + (L && L.status)) render();
+}
+let lyrViewKey = "";
+function renderLyricsView(c){
+  const L = lastSong && lyrCache[lastSong];
+  setHeaderHue(current ? hueOf(current.name) : 330);
+  const {artist, title} = lastSong ? splitSong(lastSong) : {artist:"", title:""};
+  const head = `<div class="who">${cover ? `<img src="${esc(cover)}" alt="" referrerpolicy="no-referrer">` : ""}
+    <div><h1>${esc(L && L.title || title || "Letra")}</h1><div class="sub">${esc(L && L.artist || artist)}${current ? " · " + esc(current.name) : ""}</div></div></div>`;
+  let body;
+  if (!lastSong) body = `<div class="note" style="text-align:left"><b>Nenhuma música a tocar</b>A letra aparece quando a rádio informa o nome da música.</div>`;
+  else if (!L || L.status === "loading") body = `<div class="lyr-note">A procurar a letra…</div>`;
+  else if (L.status === "none") body = `<div class="note" style="text-align:left"><b>Letra não encontrada</b>Esta música não está na base de letras, ou a rádio enviou o nome de outra forma.</div>`;
+  else body = `<div class="lyr">${lyricsHTML(L.text)}</div><div class="lyr-src">Letra: LRCLIB</div>`;
+  lyrViewKey = lastSong + "|" + (L && L.status);
+  c.innerHTML = `<div class="lyrics-view">${head}${body}</div>`;
+  $("#lyricsBtn").classList.add("on");
+}
+$("#lyricsBtn").onclick = () => {
+  if (view.name === "lyrics"){ $("#back").click(); $("#lyricsBtn").classList.remove("on"); }
+  else go({name:"lyrics"});
+};
 
 /* ---------- capa do álbum (iTunes, através do serviço) ---------- */
 let cover = null;
